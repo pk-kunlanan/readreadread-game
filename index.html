@@ -101,6 +101,28 @@
         .animate-worm { animation: bounceWorm 2.5s ease-in-out infinite; }
         .animate-sticker { animation: floatSticker 4s ease-in-out infinite; }
         .heart-particle { animation: heartPop 0.85s ease-out forwards; }
+
+        /* Visible focus outline for keyboard users (hidden for taps and clicks) */
+        :focus-visible {
+            outline: 3px dashed #18181B;
+            outline-offset: 3px;
+            border-radius: 1rem;
+        }
+        #modalPanel:focus-visible { outline: none; } /* the popup itself doesn't need an outline */
+        #gameArena.bg-slate-900 :focus-visible {
+            outline-color: #FEF08A; /* stays visible on the dark night background */
+        }
+
+        /* Respect the phone's "Reduce Motion" setting */
+        @media (prefers-reduced-motion: reduce) {
+            .animate-worm, .animate-sticker { animation: none; }
+            .heart-particle { animation-duration: 0.01ms; }
+            .btn-brutal, .btn-brutal:hover:not(:disabled), .btn-brutal:active:not(:disabled) {
+                transition: none;
+                transform: none;
+            }
+            *, *::before, *::after { transition-duration: 0.01ms !important; }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between items-center p-4 sm:p-6 md:p-8">
@@ -109,16 +131,16 @@
     <header class="w-full max-w-2xl flex justify-between items-center mb-6">
         <a href="https://readreadread.co/" target="_blank" rel="noopener noreferrer" 
            class="btn-brutal bg-pop-lemon border-brutal px-4 py-2.5 rounded-2xl shadow-hard flex items-center gap-2">
-            <span class="text-2xl">🐛</span>
+            <span class="text-2xl" aria-hidden="true">🐛</span>
             <span class="font-display font-extrabold text-lg sm:text-xl text-pop-ink">readreadread.co</span>
         </a>
 
         <div class="flex items-center gap-2 sm:gap-3">
-            <button id="rainBtn" onclick="toggleRain()" 
+            <button id="rainBtn" onclick="toggleRain()" aria-pressed="false" 
                     class="btn-brutal bg-pop-lilac border-brutal px-3.5 py-2.5 rounded-2xl text-xs font-bold shadow-hard flex items-center gap-1.5">
-                <span id="rainIcon">🎧</span> <span id="rainLabel" data-i18n="rainLabel">Lo-Fi Rain</span>
+                <span id="rainIcon" aria-hidden="true">🎧</span> <span id="rainLabel" data-i18n="rainLabel">Lo-Fi Rain</span>
             </button>
-            <button onclick="toggleLanguage()" id="langBtn" data-i18n="langBtn"
+            <button onclick="toggleLanguage()" id="langBtn" data-i18n="langBtn" data-i18n-aria="langBtnAria" aria-label="เปลี่ยนเป็นภาษาไทย"
                     class="btn-brutal bg-white border-brutal px-3.5 py-2.5 rounded-2xl text-xs font-extrabold shadow-hard">
                 🇹🇭 TH
             </button>
@@ -130,10 +152,10 @@
         <!-- Sticker Top Bar -->
         <div class="w-full flex flex-wrap justify-between items-center gap-2 mb-4">
             <div class="bg-pop-matcha border-brutal px-3.5 py-1.5 rounded-2xl text-xs font-extrabold shadow-hard-sm flex items-center gap-1.5 animate-sticker">
-                <span>⭐</span> <span id="lblLvl" data-i18n="lvlBadge">Bookworm Desk v2.0</span>
+                <span aria-hidden="true">⭐</span> <span id="lblLvl" data-i18n="lvlBadge">Bookworm Desk v2.0</span>
             </div>
             <div id="statusBadge" class="bg-pop-peach border-brutal px-3.5 py-1.5 rounded-2xl text-xs font-extrabold shadow-hard-sm flex items-center gap-1.5">
-                <span id="statusIcon">☕</span> <span id="lblStatus" data-i18n="status">Feeling: Super Cozy</span>
+                <span id="statusIcon" aria-hidden="true">☕</span> <span id="lblStatus" data-i18n="status">Feeling: Super Cozy</span>
             </div>
         </div>
 
@@ -151,8 +173,9 @@
             </div>
 
             <!-- Worm SVG Avatar (Beanie & Wire Glasses Variant) -->
-            <div id="wormAvatar" onclick="petWorm(event)" class="cursor-pointer my-2 z-10 animate-worm transition-transform active:scale-95 relative">
-                <svg width="230" height="160" viewBox="0 0 230 160">
+            <div id="wormAvatar" onclick="petWorm(event)" onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); petWorm(null); }"
+                 role="button" tabindex="0" aria-label="Pet Wormy" data-i18n-aria="petAria" class="cursor-pointer my-2 z-10 animate-worm transition-transform active:scale-95 relative">
+                <svg width="230" height="160" viewBox="0 0 230 160" aria-hidden="true" focusable="false">
                     <!-- Drop Shadow -->
                     <ellipse cx="115" cy="148" rx="70" ry="10" fill="#18181B" opacity="0.2"/>
                     
@@ -200,30 +223,30 @@
             <div class="w-full grid grid-cols-3 gap-2.5 mt-2">
                 <div class="bg-white border-2 border-black p-2.5 rounded-2xl shadow-hard-sm">
                     <div class="flex flex-wrap justify-between gap-x-1 text-[11px] font-extrabold mb-1">
-                        <span>🧋 <span data-i18n="statHunger">Hunger</span></span>
+                        <span><span aria-hidden="true">🧋</span> <span data-i18n="statHunger">Hunger</span></span>
                         <span id="hungerVal">85%</span>
                     </div>
-                    <div class="w-full bg-gray-100 h-3 rounded-full border border-black overflow-hidden">
+                    <div class="w-full bg-gray-100 h-3 rounded-full border border-black overflow-hidden" aria-hidden="true">
                         <div id="hungerBar" class="bg-pop-matcha h-full border-r border-black" style="width: 85%;"></div>
                     </div>
                 </div>
 
                 <div class="bg-white border-2 border-black p-2.5 rounded-2xl shadow-hard-sm">
                     <div class="flex flex-wrap justify-between gap-x-1 text-[11px] font-extrabold mb-1">
-                        <span>📖 <span data-i18n="statWisdom">Wisdom</span></span>
+                        <span><span aria-hidden="true">📖</span> <span data-i18n="statWisdom">Wisdom</span></span>
                         <span id="wisdomVal">70%</span>
                     </div>
-                    <div class="w-full bg-gray-100 h-3 rounded-full border border-black overflow-hidden">
+                    <div class="w-full bg-gray-100 h-3 rounded-full border border-black overflow-hidden" aria-hidden="true">
                         <div id="wisdomBar" class="bg-pop-lemon h-full border-r border-black" style="width: 70%;"></div>
                     </div>
                 </div>
 
                 <div class="bg-white border-2 border-black p-2.5 rounded-2xl shadow-hard-sm">
                     <div class="flex flex-wrap justify-between gap-x-1 text-[11px] font-extrabold mb-1">
-                        <span>⚡ <span data-i18n="statEnergy">Energy</span></span>
+                        <span><span aria-hidden="true">⚡</span> <span data-i18n="statEnergy">Energy</span></span>
                         <span id="energyVal">90%</span>
                     </div>
-                    <div class="w-full bg-gray-100 h-3 rounded-full border border-black overflow-hidden">
+                    <div class="w-full bg-gray-100 h-3 rounded-full border border-black overflow-hidden" aria-hidden="true">
                         <div id="energyBar" class="bg-pop-peach h-full border-r border-black" style="width: 90%;"></div>
                     </div>
                 </div>
@@ -233,22 +256,22 @@
         <!-- Care Control Buttons Row -->
         <div class="w-full grid grid-cols-4 gap-2.5 sm:gap-3.5 mb-6">
             <button onclick="feedMenu()" class="btn-brutal bg-pop-matcha border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
-                <span class="text-2xl mb-1">🧋</span>
+                <span class="text-2xl mb-1" aria-hidden="true">🧋</span>
                 <span class="font-extrabold text-xs text-center leading-snug" id="lblFeed" data-i18n="btnFeed">Snack</span>
             </button>
 
             <button onclick="readAction()" class="btn-brutal bg-pop-lemon border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
-                <span class="text-2xl mb-1">📖</span>
+                <span class="text-2xl mb-1" aria-hidden="true">📖</span>
                 <span class="font-extrabold text-xs text-center leading-snug" id="lblRead" data-i18n="btnRead">Read</span>
             </button>
 
             <button onclick="sweepAction()" class="btn-brutal bg-pop-lilac border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
-                <span class="text-2xl mb-1">🧹</span>
+                <span class="text-2xl mb-1" aria-hidden="true">🧹</span>
                 <span class="font-extrabold text-xs text-center leading-snug" id="lblSweep" data-i18n="btnSweep">Clean</span>
             </button>
 
             <button onclick="sleepAction()" class="btn-brutal bg-pop-peach border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
-                <span class="text-2xl mb-1">🌙</span>
+                <span class="text-2xl mb-1" aria-hidden="true">🌙</span>
                 <span class="font-extrabold text-xs text-center leading-snug" id="lblSleep" data-i18n="btnSleep">Bedtime</span>
             </button>
         </div>
@@ -256,13 +279,13 @@
         <!-- Mini-Game: Book Tarot Fortune Wheel Card -->
         <div class="w-full bg-pop-lemon/40 border-brutal rounded-3xl p-5 mb-6 shadow-hard flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3 text-center sm:text-left">
-                <span class="text-3xl bg-white p-3 rounded-2xl border-brutal shadow-hard-sm">🔮</span>
+                <span class="text-3xl bg-white p-3 rounded-2xl border-brutal shadow-hard-sm" aria-hidden="true">🔮</span>
                 <div>
                     <h3 class="font-display font-extrabold text-base sm:text-lg text-pop-ink" id="tarotTitle" data-i18n="tarotTitle">Daily Reading Tarot</h3>
                     <p class="text-xs text-pop-ink/80 font-medium" id="tarotDesc" data-i18n="tarotDesc">Spin for a gentle reading prompt & vibe of the day!</p>
                 </div>
             </div>
-            <button onclick="spinBookTarot()" class="btn-brutal bg-pop-tangerine text-white font-extrabold text-xs px-5 py-3 rounded-2xl border-brutal shadow-hard shrink-0">
+            <button onclick="spinBookTarot()" class="btn-brutal bg-pop-tangerine text-pop-ink font-extrabold text-xs px-5 py-3 rounded-2xl border-brutal shadow-hard shrink-0">
                 <span id="btnTarot" data-i18n="tarotBtn">Spin Fortune ✨</span>
             </button>
         </div>
@@ -270,13 +293,13 @@
         <!-- Babysitting & Link Sharing Banner -->
         <div class="w-full bg-white border-brutal rounded-3xl p-4 sm:p-5 mb-6 shadow-hard flex items-center justify-between gap-3">
             <div class="flex items-center gap-3">
-                <span class="text-2xl bg-pop-peach p-2.5 rounded-2xl border-brutal shadow-hard-sm">💌</span>
+                <span class="text-2xl bg-pop-peach p-2.5 rounded-2xl border-brutal shadow-hard-sm" aria-hidden="true">💌</span>
                 <div>
                     <h4 class="font-bold text-sm text-pop-ink" id="babysitTitle" data-i18n="babysitTitle">Send Wormy to Babysit</h4>
                     <p class="text-xs text-pop-ink/80 font-medium" id="babysitDesc" data-i18n="babysitDesc">Share a custom link for friends to care for your worm!</p>
                 </div>
             </div>
-            <button onclick="openBabysitModal()" class="btn-brutal bg-pop-matcha text-pop-ink font-extrabold text-xs px-4 py-2.5 rounded-2xl border-brutal shadow-hard shrink-0">
+            <button id="shareBtn" onclick="openBabysitModal()" class="btn-brutal bg-pop-matcha text-pop-ink font-extrabold text-xs px-4 py-2.5 rounded-2xl border-brutal shadow-hard shrink-0">
                 <span data-i18n="shareBtn">Share 🔗</span>
             </button>
         </div>
@@ -285,12 +308,12 @@
 
     <!-- Share / Babysit Modal -->
     <div id="shareModal" onclick="if (event.target === this) closeBabysitModal()"
-         role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true"
+         role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true" inert
          class="fixed inset-0 bg-black/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
-        <div class="bg-white border-brutal rounded-3xl p-6 max-w-sm w-full shadow-hard-lg">
+        <div id="modalPanel" tabindex="-1" class="bg-white border-brutal rounded-3xl p-6 max-w-sm w-full shadow-hard-lg">
             <div class="flex justify-between items-center mb-3">
                 <h3 id="modalTitle" class="font-display font-extrabold text-lg text-pop-ink" data-i18n="modalTitle">💌 Send Wormy to Babysit</h3>
-                <button onclick="closeBabysitModal()" aria-label="Close" data-i18n-aria="closeLabel" class="text-lg font-extrabold text-pop-ink px-1">✕</button>
+                <button onclick="closeBabysitModal()" aria-label="Close" data-i18n-aria="closeLabel" class="w-11 h-11 -mr-2 flex items-center justify-center rounded-2xl text-lg font-extrabold text-pop-ink">✕</button>
             </div>
             <p class="text-xs text-pop-ink/80 mb-4" id="modalDesc" data-i18n="modalDesc">Send this link to a friend so they can look after Wormy while you read!</p>
 
@@ -309,7 +332,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="mt-8 text-center text-xs font-extrabold text-pop-ink/60">
+    <footer class="mt-8 text-center text-xs font-extrabold text-pop-ink/70">
         <span data-i18n="footerPrefix">Crafted for</span> <a href="https://readreadread.co/" target="_blank" rel="noopener noreferrer" class="underline text-pop-ink">readreadread.co</a> ☕
     </footer>
 
@@ -347,6 +370,8 @@
         const STR = {
             EN: {
                 langBtn: '🇹🇭 TH',
+                langBtnAria: 'เปลี่ยนเป็นภาษาไทย',
+                petAria: 'Pet Wormy',
                 rainLabel: 'Lo-Fi Rain',
                 lvlBadge: 'Bookworm Desk v2.0',
                 babysitBadge: 'Babysitting mode 💌',
@@ -410,6 +435,8 @@
             },
             TH: {
                 langBtn: '🇬🇧 EN',
+                langBtnAria: 'Switch to English',
+                petAria: 'ลูบหัว Wormy',
                 rainLabel: 'เสียงฝน',
                 lvlBadge: 'โต๊ะหนอนหนังสือ v2.0',
                 babysitBadge: 'โหมดฝากเลี้ยง 💌',
@@ -684,8 +711,9 @@
             const heart = document.createElement('span');
             heart.className = 'absolute text-xl z-30 heart-particle pointer-events-none';
             heart.innerText = '💖';
-            heart.style.left = `${(e ? e.clientX - rect.left : rect.width / 2) - 10}px`;
-            heart.style.top = `${(e ? e.clientY - rect.top : rect.height / 2) - 10}px`;
+            const hasPoint = e && typeof e.clientX === 'number' && (e.clientX || e.clientY);
+            heart.style.left = `${(hasPoint ? e.clientX - rect.left : rect.width / 2) - 10}px`;
+            heart.style.top = `${(hasPoint ? e.clientY - rect.top : rect.height / 2) - 10}px`;
             room.appendChild(heart);
             setTimeout(() => heart.remove(), 850);
         }
@@ -734,6 +762,7 @@
                     if (rainNode) rainNode.stop();
                     isRainPlaying = false;
                     document.getElementById('rainIcon').innerText = '🎧';
+                    document.getElementById('rainBtn').setAttribute('aria-pressed', 'false');
                 } else {
                     const bufferSize = audioCtx.sampleRate * 2;
                     const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
@@ -758,6 +787,7 @@
 
                     isRainPlaying = true;
                     document.getElementById('rainIcon').innerText = '🔊';
+                    document.getElementById('rainBtn').setAttribute('aria-pressed', 'true');
                 }
             } catch (err) {}
         }
@@ -796,14 +826,20 @@
             resetCopyLabel();
             refreshShareUrl(); // always uses Wormy's stats at this moment
             const modal = document.getElementById('shareModal');
+            modal.inert = false;
             modal.classList.remove('opacity-0', 'pointer-events-none');
             modal.setAttribute('aria-hidden', 'false');
+            // Move focus into the popup (not the name field, so phones don't pop up the keyboard)
+            document.getElementById('modalPanel').focus();
         }
 
         function closeBabysitModal() {
             const modal = document.getElementById('shareModal');
+            if (modal.inert) return; // already closed
             modal.classList.add('opacity-0', 'pointer-events-none');
             modal.setAttribute('aria-hidden', 'true');
+            modal.inert = true;
+            document.getElementById('shareBtn').focus({ preventScroll: true }); // return to where the person was
         }
 
         async function copyBabysitUrl() {
