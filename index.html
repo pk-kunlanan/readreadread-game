@@ -1,148 +1,549 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ReadReadRead - Desk Companion</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Plus+Jakarta+Sans', sans-serif;
-      background-color: #FFFDF6;
-      background-image: radial-gradient(#18181B 0.75px, transparent 0.75px);
-      background-size: 16px 16px;
-    }
-    .neo-border { border: 3px solid #18181B; }
-    .neo-shadow { box-shadow: 5px 5px 0px #18181B; }
-    .neo-shadow-sm { box-shadow: 3px 3px 0px #18181B; }
-    .neo-btn { transition: all 0.1s ease; }
-    .neo-btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0px #18181B; }
-    .neo-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #18181B; }
-    
-    @keyframes floatWorm {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-8px) rotate(1deg); }
-    }
-    .animate-float { animation: floatWorm 3.5s ease-in-out infinite; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>readreadread.co | Cozy Neo-Brutalist Desk</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pop: {
+                            cream: '#FFFDF6',
+                            lilac: '#D8B4FE',
+                            peach: '#FFB7B2',
+                            lemon: '#FEF08A',
+                            matcha: '#BBF7D0',
+                            tangerine: '#FF7043',
+                            ink: '#18181B',
+                            shopee: '#EE4D2D'
+                        }
+                    },
+                    boxShadow: {
+                        'hard-sm': '3px 3px 0px #18181B',
+                        'hard': '5px 5px 0px #18181B',
+                        'hard-lg': '7px 7px 0px #18181B',
+                    },
+                    fontFamily: {
+                        display: ['Playfair Display', 'Prompt', 'serif'],
+                        body: ['Inter', 'Prompt', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:wght@400;500;600;700;800&family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #FFFDF6;
+            color: #18181B;
+            font-family: 'Inter', 'Prompt', sans-serif;
+            background-image: radial-gradient(#18181B 1.2px, transparent 1.2px);
+            background-size: 24px 24px;
+            user-select: none;
+        }
+
+        .border-brutal {
+            border: 3px solid #18181B;
+        }
+
+        .btn-brutal {
+            transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-brutal:hover:not(:disabled) {
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px #18181B;
+        }
+        .btn-brutal:active:not(:disabled) {
+            transform: translate(3px, 3px);
+            box-shadow: 1px 1px 0px #18181B;
+        }
+
+        @keyframes bounceWorm {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1.5deg); }
+        }
+        @keyframes floatSticker {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            50% { transform: translateY(-5px) rotate(2deg); }
+        }
+        @keyframes heartPop {
+            0% { opacity: 1; transform: translateY(0) scale(0.7); }
+            100% { opacity: 0; transform: translateY(-40px) scale(1.3); }
+        }
+
+        .animate-worm { animation: bounceWorm 2.5s ease-in-out infinite; }
+        .animate-sticker { animation: floatSticker 4s ease-in-out infinite; }
+        .heart-particle { animation: heartPop 0.85s ease-out forwards; }
+    </style>
 </head>
-<body class="p-3 sm:p-6 text-zinc-900 min-h-screen flex items-center justify-center">
+<body class="min-h-screen flex flex-col justify-between items-center p-4 sm:p-6 md:p-8">
 
-  <div class="w-full max-w-md mx-auto neo-border neo-shadow bg-[#FFFDF6] rounded-3xl p-4 sm:p-6 space-y-4 relative">
-    
-    <!-- Top Bar: Clean controls without yellow box -->
-    <div class="flex items-center justify-between gap-2">
-      <button id="rainBtn" onclick="toggleRain()" class="neo-btn neo-border neo-shadow-sm bg-[#D8B4FE] px-3 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5">
-        <span>🌧️</span> <span id="rainText">Lo-Fi Rain</span>
-      </button>
-      
-      <button onclick="toggleLang()" class="neo-btn neo-border neo-shadow-sm bg-white px-3 py-1.5 rounded-full text-xs font-black flex items-center gap-1">
-        <span>🌐</span> <span id="langText">TH</span>
-      </button>
-    </div>
+    <!-- Header Navigation -->
+    <header class="w-full max-w-2xl flex justify-between items-center mb-6">
+        <a href="https://readreadread.co/" target="_blank" rel="noopener noreferrer" 
+           class="btn-brutal bg-pop-lemon border-brutal px-4 py-2.5 rounded-2xl shadow-hard flex items-center gap-2">
+            <span class="text-2xl">🐛</span>
+            <span class="font-display font-extrabold text-lg sm:text-xl text-pop-ink">readreadread.co</span>
+        </a>
 
-    <!-- Original Chips -->
-    <div class="flex flex-wrap gap-2">
-      <div class="bg-[#BBF7D0] neo-border neo-shadow-sm px-3 py-1 rounded-full text-xs font-extrabold flex items-center gap-1">
-        <span>⭐</span> Bookworm Desk v2.0
-      </div>
-      <div class="bg-[#FFB7B2] neo-border neo-shadow-sm px-3 py-1 rounded-full text-xs font-extrabold flex items-center gap-1">
-        <span>☕</span> Feeling: Super Cozy
-      </div>
-    </div>
-
-    <!-- Original Thought Bubble -->
-    <div class="bg-[#E1BEE7] neo-border neo-shadow-sm rounded-2xl p-3 text-center relative">
-      <div class="absolute -top-3 left-4 bg-[#FEF08A] neo-border px-2 py-0.5 rounded-md text-[10px] font-black uppercase">
-        Wormy's Thought
-      </div>
-      <p id="quoteText" class="font-bold text-xs sm:text-sm mt-1">"Have you taken a cozy reading pause today? 📖"</p>
-    </div>
-
-    <!-- Original Character Arena -->
-    <div class="bg-[#F3E8FF] neo-border neo-shadow rounded-2xl p-6 flex flex-col items-center justify-center min-h-[220px] relative overflow-hidden">
-      
-      <div id="wormContainer" onclick="petWorm()" class="animate-float cursor-pointer transform hover:scale-105 transition-transform">
-        <svg width="200" height="130" viewBox="0 0 200 130" fill="none">
-          <!-- Stack of Books -->
-          <rect x="30" y="95" width="140" height="20" rx="4" fill="#BBF7D0" stroke="#18181B" stroke-width="3"/>
-          <rect x="20" y="110" width="160" height="18" rx="4" fill="#FFB7B2" stroke="#18181B" stroke-width="3"/>
-          
-          <!-- Worm Body Segments -->
-          <circle cx="55" cy="85" r="22" fill="#86EFAC" stroke="#18181B" stroke-width="3"/>
-          <circle cx="85" cy="78" r="22" fill="#86EFAC" stroke="#18181B" stroke-width="3"/>
-          <circle cx="115" cy="82" r="22" fill="#86EFAC" stroke="#18181B" stroke-width="3"/>
-          <circle cx="145" cy="70" r="26" fill="#86EFAC" stroke="#18181B" stroke-width="3"/>
-          
-          <!-- Beanie / Accessories -->
-          <path d="M125 52 C125 40, 165 40, 165 52 Z" fill="#FF7043" stroke="#18181B" stroke-width="3"/>
-          <circle cx="145" cy="38" r="7" fill="#FFF59D" stroke="#18181B" stroke-width="3"/>
-          
-          <!-- Eyes & Expression -->
-          <circle cx="137" cy="68" r="5" fill="#18181B"/>
-          <circle cx="153" cy="68" r="5" fill="#18181B"/>
-          <path d="M140 76 Q145 80 150 76" stroke="#18181B" stroke-width="3" stroke-linecap="round" fill="none"/>
-        </svg>
-      </div>
-
-    </div>
-
-    <!-- Original Stat Meters -->
-    <div class="grid grid-cols-3 gap-2">
-      <div class="bg-white neo-border neo-shadow-sm p-2.5 rounded-2xl text-center">
-        <div class="text-[10px] font-black uppercase text-zinc-500">Hunger</div>
-        <div id="hungerVal" class="font-extrabold text-sm sm:text-base">85%</div>
-        <div class="w-full bg-zinc-100 neo-border h-2 rounded-full mt-1 overflow-hidden">
-          <div class="bg-[#86EFAC] h-full w-[85%]"></div>
+        <div class="flex items-center gap-2 sm:gap-3">
+            <button id="rainBtn" onclick="toggleRain()" 
+                    class="btn-brutal bg-pop-lilac border-brutal px-3.5 py-2.5 rounded-2xl text-xs font-bold shadow-hard flex items-center gap-1.5">
+                <span id="rainIcon">🎧</span> <span id="rainLabel">Lo-Fi Rain</span>
+            </button>
+            <button onclick="toggleLanguage()" id="langBtn" 
+                    class="btn-brutal bg-white border-brutal px-3.5 py-2.5 rounded-2xl text-xs font-extrabold shadow-hard">
+                🇹🇭 TH
+            </button>
         </div>
-      </div>
-      <div class="bg-white neo-border neo-shadow-sm p-2.5 rounded-2xl text-center">
-        <div class="text-[10px] font-black uppercase text-zinc-500">Mood</div>
-        <div id="moodVal" class="font-extrabold text-sm sm:text-base">70%</div>
-        <div class="w-full bg-zinc-100 neo-border h-2 rounded-full mt-1 overflow-hidden">
-          <div class="bg-[#FEF08A] h-full w-[70%]"></div>
+    </header>
+
+    <main class="w-full max-w-2xl flex flex-col items-center">
+
+        <!-- Sticker Top Bar -->
+        <div class="w-full flex flex-wrap justify-between items-center gap-2 mb-4">
+            <div class="bg-pop-matcha border-brutal px-3.5 py-1.5 rounded-2xl text-xs font-extrabold shadow-hard-sm flex items-center gap-1.5 animate-sticker">
+                <span>⭐</span> <span id="lblLvl">Bookworm Desk v2.0</span>
+            </div>
+            <div id="statusBadge" class="bg-pop-peach border-brutal px-3.5 py-1.5 rounded-2xl text-xs font-extrabold shadow-hard-sm flex items-center gap-1.5">
+                <span>☕</span> <span id="lblStatus">Feeling: Super Cozy</span>
+            </div>
         </div>
-      </div>
-      <div class="bg-white neo-border neo-shadow-sm p-2.5 rounded-2xl text-center">
-        <div class="text-[10px] font-black uppercase text-zinc-500">Energy</div>
-        <div id="energyVal" class="font-extrabold text-sm sm:text-base">90%</div>
-        <div class="w-full bg-zinc-100 neo-border h-2 rounded-full mt-1 overflow-hidden">
-          <div class="bg-[#FFB7B2] h-full w-[90%]"></div>
+
+        <!-- Main Pet Arena Card -->
+        <div id="gameArena" class="w-full bg-pop-lilac/30 border-brutal rounded-3xl p-5 mb-6 shadow-hard-lg flex flex-col items-center relative overflow-hidden transition-colors duration-300">
+            
+            <!-- Speech Bubble Floating Widget -->
+            <div id="speechBox" class="w-full bg-white border-brutal p-3.5 rounded-2xl shadow-hard z-10 mb-3 text-center relative">
+                <div class="absolute -top-3 left-6 bg-pop-lemon border-brutal text-[10px] font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                    Wormy's Thought
+                </div>
+                <p id="speechText" class="font-body text-xs sm:text-sm font-bold text-pop-ink mt-0.5">
+                    "Have you taken a cozy reading pause today? 📖"
+                </p>
+            </div>
+
+            <!-- Worm SVG Avatar (Beanie & Wire Glasses Variant) -->
+            <div id="wormAvatar" onclick="petWorm(event)" class="cursor-pointer my-2 z-10 animate-worm transition-transform active:scale-95 relative">
+                <svg width="230" height="160" viewBox="0 0 230 160">
+                    <!-- Drop Shadow -->
+                    <ellipse cx="115" cy="148" rx="70" ry="10" fill="#18181B" opacity="0.2"/>
+                    
+                    <!-- Pillow Book Stack Base -->
+                    <rect x="30" y="120" width="170" height="20" rx="6" fill="#FFB7B2" stroke="#18181B" stroke-width="3.5"/>
+                    <rect x="42" y="104" width="146" height="18" rx="5" fill="#BBF7D0" stroke="#18181B" stroke-width="3.5"/>
+                    <rect x="58" y="90" width="114" height="16" rx="4" fill="#FEF08A" stroke="#18181B" stroke-width="3.5"/>
+                    
+                    <!-- Worm Body Segments -->
+                    <path d="M 50,118 C 40,88 68,76 82,104" fill="#BBF7D0" stroke="#18181B" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M 78,104 C 72,74 105,64 120,98" fill="#D8B4FE" stroke="#18181B" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M 116,100 C 110,56 150,52 165,92" fill="#BBF7D0" stroke="#18181B" stroke-width="4" stroke-linecap="round"/>
+                    
+                    <!-- Head -->
+                    <circle cx="165" cy="65" r="33" fill="#FEF08A" stroke="#18181B" stroke-width="4"/>
+                    
+                    <!-- Cheeks -->
+                    <circle cx="148" cy="74" r="5.5" fill="#FFB7B2" stroke="#18181B" stroke-width="1.5"/>
+                    <circle cx="182" cy="74" r="5.5" fill="#FFB7B2" stroke="#18181B" stroke-width="1.5"/>
+
+                    <!-- Eyes -->
+                    <circle id="eyeL" cx="154" cy="62" r="5.5" fill="#18181B"/>
+                    <circle id="eyeR" cx="176" cy="62" r="5.5" fill="#18181B"/>
+                    <circle cx="152" cy="60" r="2" fill="#FFFFFF"/>
+                    <circle cx="174" cy="60" r="2" fill="#FFFFFF"/>
+
+                    <!-- Wire Glasses -->
+                    <circle cx="153" cy="62" r="11" fill="none" stroke="#18181B" stroke-width="2.5"/>
+                    <circle cx="175" cy="62" r="11" fill="none" stroke="#18181B" stroke-width="2.5"/>
+                    <line x1="164" y1="62" x2="164" y2="62" stroke="#18181B" stroke-width="3.5"/>
+
+                    <!-- Mouth -->
+                    <path id="wormMouth" d="M 160,74 Q 165,82 170,74" fill="none" stroke="#18181B" stroke-width="3.5" stroke-linecap="round"/>
+
+                    <!-- Cozy Beanie Hat -->
+                    <path d="M 135,52 C 135,26 195,26 195,52" fill="#FF7043" stroke="#18181B" stroke-width="4"/>
+                    <rect x="131" y="46" width="68" height="12" rx="4" fill="#D8B4FE" stroke="#18181B" stroke-width="3"/>
+                    <circle cx="165" cy="24" r="7" fill="#FFFDF6" stroke="#18181B" stroke-width="3"/>
+                </svg>
+            </div>
+
+            <!-- Stat Progress Bars Grid -->
+            <div class="w-full grid grid-cols-3 gap-2.5 mt-2">
+                <div class="bg-white border-2 border-black p-2.5 rounded-2xl shadow-hard-sm">
+                    <div class="flex justify-between text-[11px] font-extrabold mb-1">
+                        <span>🧋 Hunger</span>
+                        <span id="hungerVal">85%</span>
+                    </div>
+                    <div class="w-full bg-gray-100 h-3 rounded-full border border-black overflow-hidden">
+                        <div id="hungerBar" class="bg-pop-matcha h-full border-r border-black" style="width: 85%;"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white border-2 border-black p-2.5 rounded-2xl shadow-hard-sm">
+                    <div class="flex justify-between text-[11px] font-extrabold mb-1">
+                        <span>📖 Wisdom</span>
+                        <span id="wisdomVal">70%</span>
+                    </div>
+                    <div class="w-full bg-gray-100 h-3 rounded-full border border-black overflow-hidden">
+                        <div id="wisdomBar" class="bg-pop-lemon h-full border-r border-black" style="width: 70%;"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white border-2 border-black p-2.5 rounded-2xl shadow-hard-sm">
+                    <div class="flex justify-between text-[11px] font-extrabold mb-1">
+                        <span>⚡ Energy</span>
+                        <span id="energyVal">90%</span>
+                    </div>
+                    <div class="w-full bg-gray-100 h-3 rounded-full border border-black overflow-hidden">
+                        <div id="energyBar" class="bg-pop-peach h-full border-r border-black" style="width: 90%;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <!-- Care Control Buttons Row -->
+        <div class="w-full grid grid-cols-4 gap-2.5 sm:gap-3.5 mb-6">
+            <button onclick="feedMenu()" class="btn-brutal bg-pop-matcha border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
+                <span class="text-2xl mb-1">🧋</span>
+                <span class="font-extrabold text-xs" id="lblFeed">Snack</span>
+            </button>
+
+            <button onclick="readAction()" class="btn-brutal bg-pop-lemon border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
+                <span class="text-2xl mb-1">📖</span>
+                <span class="font-extrabold text-xs" id="lblRead">Read</span>
+            </button>
+
+            <button onclick="sweepAction()" class="btn-brutal bg-pop-lilac border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
+                <span class="text-2xl mb-1">🧹</span>
+                <span class="font-extrabold text-xs" id="lblSweep">Clean</span>
+            </button>
+
+            <button onclick="sleepAction()" class="btn-brutal bg-pop-peach border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
+                <span class="text-2xl mb-1">🌙</span>
+                <span class="font-extrabold text-xs" id="lblSleep">Bedtime</span>
+            </button>
+        </div>
+
+        <!-- Mini-Game: Book Tarot Fortune Wheel Card -->
+        <div class="w-full bg-pop-lemon/40 border-brutal rounded-3xl p-5 mb-6 shadow-hard flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3 text-center sm:text-left">
+                <span class="text-3xl bg-white p-3 rounded-2xl border-brutal shadow-hard-sm">🔮</span>
+                <div>
+                    <h3 class="font-display font-extrabold text-base sm:text-lg text-pop-ink" id="tarotTitle">Daily Reading Tarot</h3>
+                    <p class="text-xs text-pop-ink/80 font-medium" id="tarotDesc">Spin for a gentle reading prompt & vibe of the day!</p>
+                </div>
+            </div>
+            <button onclick="spinBookTarot()" class="btn-brutal bg-pop-tangerine text-white font-extrabold text-xs px-5 py-3 rounded-2xl border-brutal shadow-hard shrink-0">
+                <span id="btnTarot">Spin Fortune ✨</span>
+            </button>
+        </div>
+
+        <!-- Babysitting & Link Sharing Banner -->
+        <div class="w-full bg-white border-brutal rounded-3xl p-4 sm:p-5 mb-6 shadow-hard flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl bg-pop-peach p-2.5 rounded-2xl border-brutal shadow-hard-sm">💌</span>
+                <div>
+                    <h4 class="font-bold text-sm text-pop-ink" id="babysitTitle">Send Wormy to Babysit</h4>
+                    <p class="text-xs text-pop-ink/80 font-medium" id="babysitDesc">Share a custom link for friends to care for your worm!</p>
+                </div>
+            </div>
+            <button onclick="openBabysitModal()" class="btn-brutal bg-pop-matcha text-pop-ink font-extrabold text-xs px-4 py-2.5 rounded-2xl border-brutal shadow-hard shrink-0">
+                Share 🔗
+            </button>
+        </div>
+
+        <!-- Spotlight Shopee Book Card -->
+        <div class="w-full bg-white border-brutal rounded-3xl p-5 shadow-hard-lg flex flex-col sm:flex-row items-center gap-5 relative overflow-hidden">
+            <div class="absolute -top-1 -right-1 bg-pop-tangerine text-white font-black text-[10px] px-3.5 py-1 border-b-2 border-l-2 border-black rounded-bl-2xl uppercase tracking-wider">
+                Wormy's Pick 📖
+            </div>
+
+            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=300&q=80" 
+                 onerror="this.src='https://placehold.co/120x160/FEF08A/18181B?text=Liz+Climo'" 
+                 alt="I'm So Happy You're Here" 
+                 class="w-24 h-32 object-cover rounded-2xl border-brutal shadow-hard shrink-0" />
+
+            <div class="text-center sm:text-left flex-1">
+                <div class="flex items-center justify-center sm:justify-start gap-1 mb-1">
+                    <span class="text-xs">⭐⭐⭐⭐⭐</span>
+                    <span class="text-[10px] font-extrabold bg-pop-lemon px-2 py-0.5 rounded-md border border-black">5.0 / 5.0</span>
+                </div>
+                <h3 class="font-display font-extrabold text-lg sm:text-xl text-pop-ink leading-tight">"I'm So Happy You're Here"</h3>
+                <p class="text-xs text-pop-ink/80 font-medium mt-1 mb-3.5">by Liz Climo — A warm, illustrated hug in book form for gentle days.</p>
+                
+                <a href="https://shopee.co.th" target="_blank" rel="noopener noreferrer" 
+                   class="btn-brutal inline-flex items-center gap-2 bg-pop-shopee text-white font-extrabold text-xs px-4.5 py-2.5 rounded-2xl border-brutal shadow-hard">
+                   <span>Buy on Shopee 🛒</span>
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Share / Babysit Modal -->
+    <div id="shareModal" class="fixed inset-0 bg-black/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+        <div class="bg-white border-brutal rounded-3xl p-6 max-w-sm w-full shadow-hard-lg">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-display font-extrabold text-lg text-pop-ink">💌 Send to Babysit</h3>
+                <button onclick="closeBabysitModal()" class="text-lg font-extrabold text-pop-ink">✕</button>
+            </div>
+            <p class="text-xs text-pop-ink/80 mb-4" id="modalDesc">Send this link to a friend so they can feed and play with Wormy while you read!</p>
+            
+            <div class="bg-pop-lemon/40 p-3 rounded-2xl border-brutal mb-4 break-all text-xs font-mono text-pop-ink" id="shareUrlBox">
+                https://readreadread.co/?pet=Wormy
+            </div>
+
+            <button onclick="copyBabysitUrl()" class="btn-brutal w-full bg-pop-matcha text-pop-ink font-extrabold text-sm py-3 rounded-2xl border-brutal shadow-hard">
+                📋 Copy Babysit Link
+            </button>
+        </div>
     </div>
 
-    <!-- Original Action Controls -->
-    <div class="grid grid-cols-3 gap-2">
-      <button onclick="feedWorm()" class="neo-btn neo-border neo-shadow-sm bg-[#BBF7D0] py-2.5 px-2 rounded-xl text-xs font-black flex items-center justify-center gap-1">
-        <span>🧋</span> Feed
-      </button>
-      <button onclick="readWorm()" class="neo-btn neo-border neo-shadow-sm bg-[#FEF08A] py-2.5 px-2 rounded-xl text-xs font-black flex items-center justify-center gap-1">
-        <span>📖</span> Read
-      </button>
-      <button onclick="cleanWorm()" class="neo-btn neo-border neo-shadow-sm bg-[#FFB7B2] py-2.5 px-2 rounded-xl text-xs font-black flex items-center justify-center gap-1">
-        <span>🧹</span> Sweep
-      </button>
-    </div>
+    <!-- Footer -->
+    <footer class="mt-8 text-center text-xs font-extrabold text-pop-ink/60">
+        Crafted for <a href="https://readreadread.co/" class="underline text-pop-ink">readreadread.co</a> ☕
+    </footer>
 
-  </div>
+    <!-- Logic Script -->
+    <script>
+        let currentLang = 'EN';
+        let isRainPlaying = false;
+        let isSleeping = false;
+        let audioCtx = null;
+        let rainNode = null;
 
-  <script>
-    function toggleRain() {
-      const btn = document.getElementById('rainText');
-      btn.innerText = btn.innerText === 'Lo-Fi Rain' ? 'Playing 🎵' : 'Lo-Fi Rain';
-    }
+        let hunger = 85;
+        let wisdom = 70;
+        let energy = 90;
 
-    function toggleLang() {
-      const lang = document.getElementById('langText');
-      lang.innerText = lang.innerText === 'TH' ? 'EN' : 'TH';
-    }
+        const quotes = {
+            EN: [
+                "Read a page today? 📖 Or maybe take a sip of water? ☕",
+                "Reading 3 pages right now is better than 0 pages! 🌿",
+                "Take a gentle breath and relax your shoulders. ✨",
+                "Cozy reading time is always well spent! ☕",
+                "Be kind to yourself today—you're doing great! 🧸"
+            ],
+            TH: [
+                "วันนี้อ่านหนังสือสักหน้าหรือยัง? 📖 หรือจิบน้ำอุ่นๆ กัน? ☕",
+                "อ่านแค่วันละ 3 หน้า ก็เก่งมากแล้วนะ! 🌿",
+                "หายใจเข้าลึกๆ แล้วผ่อนคลายไหล่ลงนะ ✨",
+                "ช่วงเวลาอ่านหนังสือนุ่มฟูเสมอ! ☕",
+                "ใจดีกับตัวเองในวันนี้ด้วยนะ คุณทำได้ดีแล้ว! 🧸"
+            ]
+        };
 
-    function feedWorm() {}
-    function readWorm() {}
-    function cleanWorm() {}
-    function petWorm() {}
-  </script>
+        const tarotPrompts = {
+            EN: [
+                "🔮 Tarot: Read 5 pages of something that makes you smile today!",
+                "🔮 Tarot: Sip a warm tea and enjoy a graphic novel chapter ☕",
+                "🔮 Tarot: Bookmark a page you love and share it with a friend 🔖",
+                "🔮 Tarot: Take a 10-minute digital detox & read offline 🌿"
+            ],
+            TH: [
+                "🔮 ดูดวงการอ่าน: อ่านหนังสือที่ทำให้คุณยิ้มได้สัก 5 หน้าวันนี้!",
+                "🔮 ดูดวงการอ่าน: จิบชาอุ่นๆ แล้วอ่านการ์ตูนช่องสนุกๆ สักตอน ☕",
+                "🔮 ดูดวงการอ่าน: คั่นหน้าที่คุณชอบแล้วส่งให้เพื่อนดู 🔖",
+                "🔮 ดูดวงการอ่าน: พักจอ 10 นาทีแล้วหยิบหนังสือเล่มโปรดขึ้นมาอ่าน 🌿"
+            ]
+        };
+
+        function petWorm(e) {
+            playSynthSound('pop');
+            spawnHeart(e);
+            wisdom = Math.min(100, wisdom + 5);
+            updateBars();
+            setSpeech(currentLang === 'EN' ? "Wormy loves headpats! 💖" : "ลูบหัว Wormy แล้วอารมณ์ดีเลย! 💖");
+        }
+
+        function feedMenu() {
+            playSynthSound('munch');
+            hunger = Math.min(100, hunger + 20);
+            updateBars();
+            setSpeech(currentLang === 'EN' ? "Yum! Boba tea & matcha latte are delicious! 🧋" : "อร่อยมาก! ได้ชานมไข่มุกแล้วพลังมาเต็ม!");
+        }
+
+        function readAction() {
+            playSynthSound('pop');
+            wisdom = Math.min(100, wisdom + 15);
+            updateBars();
+            const qList = quotes[currentLang];
+            const randomQ = qList[Math.floor(Math.random() * qList.length)];
+            setSpeech(randomQ);
+        }
+
+        function sweepAction() {
+            playSynthSound('sweep');
+            energy = Math.min(100, energy + 10);
+            updateBars();
+            setSpeech(currentLang === 'EN' ? "All clean! Desk is tidy for reading! 🧹" : "โต๊ะสะอาดพร้อมอ่านหนังสือแล้ว!");
+        }
+
+        function sleepAction() {
+            playSynthSound('pop');
+            isSleeping = !isSleeping;
+            const arena = document.getElementById('gameArena');
+            if (isSleeping) {
+                arena.classList.replace('bg-pop-lilac/30', 'bg-slate-900');
+                energy = 100;
+                setSpeech(currentLang === 'EN' ? "Shhh... Wormy is taking a cozy catnap! 🌙 Zzz..." : "ชูว์... Wormy กำลังงีบหลับพักผ่อน! 🌙 Zzz...");
+            } else {
+                arena.classList.replace('bg-slate-900', 'bg-pop-lilac/30');
+                setSpeech(currentLang === 'EN' ? "Good morning! Ready to read? ☀️" : "อรุณสวัสดิ์! พร้อมอ่านหนังสือหรือยัง? ☀️");
+            }
+            updateBars();
+        }
+
+        function spinBookTarot() {
+            playSynthSound('pop');
+            const list = tarotPrompts[currentLang];
+            const result = list[Math.floor(Math.random() * list.length)];
+            setSpeech(result);
+        }
+
+        function updateBars() {
+            document.getElementById('hungerVal').innerText = `${hunger}%`;
+            document.getElementById('hungerBar').style.width = `${hunger}%`;
+
+            document.getElementById('wisdomVal').innerText = `${wisdom}%`;
+            document.getElementById('wisdomBar').style.width = `${wisdom}%`;
+
+            document.getElementById('energyVal').innerText = `${energy}%`;
+            document.getElementById('energyBar').style.width = `${energy}%`;
+        }
+
+        function setSpeech(msg) {
+            document.getElementById('speechText').innerText = msg;
+        }
+
+        function spawnHeart(e) {
+            const room = document.getElementById('gameArena');
+            const rect = room.getBoundingClientRect();
+            const heart = document.createElement('span');
+            heart.className = 'absolute text-xl z-30 heart-particle pointer-events-none';
+            heart.innerText = '💖';
+            heart.style.left = `${(e ? e.clientX - rect.left : rect.width / 2) - 10}px`;
+            heart.style.top = `${(e ? e.clientY - rect.top : rect.height / 2) - 10}px`;
+            room.appendChild(heart);
+            setTimeout(() => heart.remove(), 850);
+        }
+
+        function playSynthSound(type) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'munch') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.exponentialRampToValueAtTime(440, now + 0.1);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                    osc.start(now);
+                    osc.stop(now + 0.1);
+                } else if (type === 'sweep') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(500, now);
+                    osc.frequency.exponentialRampToValueAtTime(200, now + 0.15);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                    osc.start(now);
+                    osc.stop(now + 0.15);
+                } else {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.exponentialRampToValueAtTime(640, now + 0.12);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                }
+            } catch (err) {}
+        }
+
+        function toggleRain() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (isRainPlaying) {
+                    if (rainNode) rainNode.stop();
+                    isRainPlaying = false;
+                    document.getElementById('rainIcon').innerText = '🎧';
+                } else {
+                    const bufferSize = audioCtx.sampleRate * 2;
+                    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                    const output = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) output[i] = Math.random() * 2 - 1;
+
+                    rainNode = audioCtx.createBufferSource();
+                    rainNode.buffer = buffer;
+                    rainNode.loop = true;
+
+                    const filter = audioCtx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.value = 750;
+
+                    const gain = audioCtx.createGain();
+                    gain.gain.value = 0.05;
+
+                    rainNode.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    rainNode.start();
+
+                    isRainPlaying = true;
+                    document.getElementById('rainIcon').innerText = '🔊';
+                }
+            } catch (err) {}
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'EN' ? 'TH' : 'EN';
+            document.getElementById('langBtn').innerText = currentLang === 'EN' ? '🇹🇭 TH' : '🇬🇧 EN';
+            document.getElementById('rainLabel').innerText = currentLang === 'EN' ? 'Lo-Fi Rain' : 'เสียงฝน';
+            document.getElementById('lblFeed').innerText = currentLang === 'EN' ? 'Snack' : 'ป้อนขนม';
+            document.getElementById('lblRead').innerText = currentLang === 'EN' ? 'Read' : 'อ่านโควท';
+            document.getElementById('lblSweep').innerText = currentLang === 'EN' ? 'Clean' : 'ทำความสะอาด';
+            document.getElementById('lblSleep').innerText = currentLang === 'EN' ? 'Bedtime' : 'เข้านอน';
+            document.getElementById('tarotTitle').innerText = currentLang === 'EN' ? 'Daily Reading Tarot' : 'สุ่มดวงการอ่านประจำวัน';
+            document.getElementById('tarotDesc').innerText = currentLang === 'EN' ? 'Spin for a gentle reading prompt & vibe of the day!' : 'หมุนเพื่อรับคำแนะนำการอ่านประจำวัน!';
+            document.getElementById('btnTarot').innerText = currentLang === 'EN' ? 'Spin Fortune ✨' : 'สุ่มดวงเลย ✨';
+            document.getElementById('babysitTitle').innerText = currentLang === 'EN' ? 'Send Wormy to Babysit' : 'ส่ง Wormy ให้เพื่อนฝากเลี้ยง';
+            document.getElementById('babysitDesc').innerText = currentLang === 'EN' ? 'Share a custom link for friends to care for your worm!' : 'สร้างลิงก์ให้เพื่อนช่วยดูแล Wormy ระหว่างที่คุณอ่านหนังสือ';
+            setSpeech(quotes[currentLang][0]);
+        }
+
+        function openBabysitModal() {
+            document.getElementById('shareModal').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeBabysitModal() {
+            document.getElementById('shareModal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function copyBabysitUrl() {
+            const tempInput = document.createElement('input');
+            tempInput.value = "https://readreadread.co/?pet=WormyBeanie";
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert(currentLang === 'EN' ? "📋 Link copied to clipboard!" : "📋 คัดลอกลิงก์เรียบร้อยแล้ว!");
+            closeBabysitModal();
+        }
+    </script>
 </body>
 </html>
