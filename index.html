@@ -31,34 +31,36 @@
 
   <div class="w-full max-w-md mx-auto neo-border neo-shadow bg-[#FFFDF6] rounded-3xl p-4 sm:p-6 space-y-4 relative">
     
-    <!-- Top Bar without redundant yellow badge -->
+    <!-- Top Bar: Clean controls without yellow box -->
     <div class="flex items-center justify-between gap-2">
-      <div class="flex items-center gap-2">
-        <button id="rainBtn" onclick="toggleRain()" class="neo-btn neo-border neo-shadow-sm bg-[#D8B4FE] px-3 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5">
-          <span>🌧️</span> <span id="rainText">Lo-Fi Rain</span>
-        </button>
-      </div>
+      <button id="rainBtn" onclick="toggleRain()" class="neo-btn neo-border neo-shadow-sm bg-[#D8B4FE] px-3 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5">
+        <span>🌧️</span> <span id="rainText">Lo-Fi Rain</span>
+      </button>
       
       <button onclick="toggleLang()" class="neo-btn neo-border neo-shadow-sm bg-white px-3 py-1.5 rounded-full text-xs font-black flex items-center gap-1">
         <span>🌐</span> <span id="langText">TH</span>
       </button>
     </div>
 
-    <!-- Evolution Stage Chip -->
-    <div class="flex justify-between items-center bg-[#FEF08A] neo-border neo-shadow-sm px-4 py-2 rounded-2xl">
-      <div class="flex items-center gap-2">
-        <span class="text-lg">🐛</span>
-        <span id="stageLabel" class="font-extrabold text-xs tracking-wide uppercase">Stage 2: Page Turner</span>
+    <!-- Original Chips -->
+    <div class="flex flex-wrap gap-2">
+      <div class="bg-[#BBF7D0] neo-border neo-shadow-sm px-3 py-1 rounded-full text-xs font-extrabold flex items-center gap-1">
+        <span>⭐</span> Bookworm Desk v2.0
       </div>
-      <span id="levelLabel" class="bg-white neo-border px-2 py-0.5 rounded-full text-[10px] font-black">LVL 2</span>
+      <div class="bg-[#FFB7B2] neo-border neo-shadow-sm px-3 py-1 rounded-full text-xs font-extrabold flex items-center gap-1">
+        <span>☕</span> Feeling: Super Cozy
+      </div>
     </div>
 
-    <!-- Thought Bubble -->
+    <!-- Original Thought Bubble -->
     <div class="bg-[#E1BEE7] neo-border neo-shadow-sm rounded-2xl p-3 text-center relative">
-      <p id="quoteText" class="font-bold text-xs sm:text-sm">"Have you taken a cozy reading pause today? 📖"</p>
+      <div class="absolute -top-3 left-4 bg-[#FEF08A] neo-border px-2 py-0.5 rounded-md text-[10px] font-black uppercase">
+        Wormy's Thought
+      </div>
+      <p id="quoteText" class="font-bold text-xs sm:text-sm mt-1">"Have you taken a cozy reading pause today? 📖"</p>
     </div>
 
-    <!-- Main Character Arena -->
+    <!-- Original Character Arena -->
     <div class="bg-[#F3E8FF] neo-border neo-shadow rounded-2xl p-6 flex flex-col items-center justify-center min-h-[220px] relative overflow-hidden">
       
       <div id="wormContainer" onclick="petWorm()" class="animate-float cursor-pointer transform hover:scale-105 transition-transform">
@@ -86,52 +88,47 @@
 
     </div>
 
-    <!-- Evolution XP Bar -->
-    <div class="bg-white neo-border p-3 rounded-2xl space-y-1">
-      <div class="flex justify-between text-[11px] font-black">
-        <span>EVOLUTION PROGRESS</span>
-        <span id="xpText">75 / 150 XP</span>
+    <!-- Original Stat Meters -->
+    <div class="grid grid-cols-3 gap-2">
+      <div class="bg-white neo-border neo-shadow-sm p-2.5 rounded-2xl text-center">
+        <div class="text-[10px] font-black uppercase text-zinc-500">Hunger</div>
+        <div id="hungerVal" class="font-extrabold text-sm sm:text-base">85%</div>
+        <div class="w-full bg-zinc-100 neo-border h-2 rounded-full mt-1 overflow-hidden">
+          <div class="bg-[#86EFAC] h-full w-[85%]"></div>
+        </div>
       </div>
-      <div class="w-full bg-zinc-100 neo-border h-4 rounded-full overflow-hidden p-0.5">
-        <div id="xpBar" class="bg-[#86EFAC] h-full rounded-full transition-all duration-300" style="width: 50%;"></div>
+      <div class="bg-white neo-border neo-shadow-sm p-2.5 rounded-2xl text-center">
+        <div class="text-[10px] font-black uppercase text-zinc-500">Mood</div>
+        <div id="moodVal" class="font-extrabold text-sm sm:text-base">70%</div>
+        <div class="w-full bg-zinc-100 neo-border h-2 rounded-full mt-1 overflow-hidden">
+          <div class="bg-[#FEF08A] h-full w-[70%]"></div>
+        </div>
+      </div>
+      <div class="bg-white neo-border neo-shadow-sm p-2.5 rounded-2xl text-center">
+        <div class="text-[10px] font-black uppercase text-zinc-500">Energy</div>
+        <div id="energyVal" class="font-extrabold text-sm sm:text-base">90%</div>
+        <div class="w-full bg-zinc-100 neo-border h-2 rounded-full mt-1 overflow-hidden">
+          <div class="bg-[#FFB7B2] h-full w-[90%]"></div>
+        </div>
       </div>
     </div>
 
-    <!-- Stat Meters -->
+    <!-- Original Action Controls -->
     <div class="grid grid-cols-3 gap-2">
-      <div class="bg-white neo-border neo-shadow-sm p-2 rounded-xl text-center">
-        <div class="text-[10px] font-black uppercase">Hunger 🧋</div>
-        <div id="hungerVal" class="font-extrabold text-sm">85%</div>
-      </div>
-      <div class="bg-white neo-border neo-shadow-sm p-2 rounded-xl text-center">
-        <div class="text-[10px] font-black uppercase">Mood 📖</div>
-        <div id="moodVal" class="font-extrabold text-sm">70%</div>
-      </div>
-      <div class="bg-white neo-border neo-shadow-sm p-2 rounded-xl text-center">
-        <div class="text-[10px] font-black uppercase">Energy ⚡</div>
-        <div id="energyVal" class="font-extrabold text-sm">90%</div>
-      </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="grid grid-cols-3 gap-2">
-      <button onclick="actionCare('feed')" class="neo-btn neo-border neo-shadow-sm bg-[#BBF7D0] p-2.5 rounded-xl text-xs font-black">🧋 Feed</button>
-      <button onclick="actionCare('read')" class="neo-btn neo-border neo-shadow-sm bg-[#FEF08A] p-2.5 rounded-xl text-xs font-black">📖 Read</button>
-      <button onclick="actionCare('clean')" class="neo-btn neo-border neo-shadow-sm bg-[#FFB7B2] p-2.5 rounded-xl text-xs font-black">🧹 Sweep</button>
+      <button onclick="feedWorm()" class="neo-btn neo-border neo-shadow-sm bg-[#BBF7D0] py-2.5 px-2 rounded-xl text-xs font-black flex items-center justify-center gap-1">
+        <span>🧋</span> Feed
+      </button>
+      <button onclick="readWorm()" class="neo-btn neo-border neo-shadow-sm bg-[#FEF08A] py-2.5 px-2 rounded-xl text-xs font-black flex items-center justify-center gap-1">
+        <span>📖</span> Read
+      </button>
+      <button onclick="cleanWorm()" class="neo-btn neo-border neo-shadow-sm bg-[#FFB7B2] py-2.5 px-2 rounded-xl text-xs font-black flex items-center justify-center gap-1">
+        <span>🧹</span> Sweep
+      </button>
     </div>
 
   </div>
 
   <script>
-    let xp = 75;
-    let maxXp = 150;
-
-    function actionCare(type) {
-      xp = Math.min(maxXp, xp + 15);
-      document.getElementById('xpText').innerText = `${xp} / ${maxXp} XP`;
-      document.getElementById('xpBar').style.width = `${(xp/maxXp)*100}%`;
-    }
-
     function toggleRain() {
       const btn = document.getElementById('rainText');
       btn.innerText = btn.innerText === 'Lo-Fi Rain' ? 'Playing 🎵' : 'Lo-Fi Rain';
@@ -142,9 +139,10 @@
       lang.innerText = lang.innerText === 'TH' ? 'EN' : 'TH';
     }
 
-    function petWorm() {
-      actionCare('pet');
-    }
+    function feedWorm() {}
+    function readWorm() {}
+    function cleanWorm() {}
+    function petWorm() {}
   </script>
 </body>
 </html>
