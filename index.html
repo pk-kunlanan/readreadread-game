@@ -133,7 +133,7 @@
                 <span>⭐</span> <span id="lblLvl" data-i18n="lvlBadge">Bookworm Desk v2.0</span>
             </div>
             <div id="statusBadge" class="bg-pop-peach border-brutal px-3.5 py-1.5 rounded-2xl text-xs font-extrabold shadow-hard-sm flex items-center gap-1.5">
-                <span>☕</span> <span id="lblStatus" data-i18n="status">Feeling: Super Cozy</span>
+                <span id="statusIcon">☕</span> <span id="lblStatus" data-i18n="status">Feeling: Super Cozy</span>
             </div>
         </div>
 
@@ -318,10 +318,19 @@
         // Where babysit links point. This is the live game address on GitHub Pages.
         const GAME_URL = 'https://pk-kunlanan.github.io/readreadread-game/';
 
+        // ===== GENTLE DRIFT SETTINGS (safe to tune) =====
+        // How many points each stat loses per hour while Wormy is awake.
+        const DRIFT_PER_HOUR = { hunger: 3, wisdom: 1.5, energy: 2.5 };
+        const STAT_FLOOR = 20;         // stats never drift below this: Wormy never gets sick or sad
+        const LOW_STAT = 50;           // below this, Wormy's mood changes
+        const WELCOME_AFTER_HOURS = 3; // away this long = "welcome back" message
+        const SAVE_KEY = 'rrr-wormy-v1';
+
         let currentLang = 'EN';
         let isRainPlaying = false;
         let isSleeping = false;
         let isBabysitMode = false;
+        let canSave = true;            // off for babysit visits and previews, so they never overwrite anyone's own Wormy
         let babysitFrom = '';
         let audioCtx = null;
         let rainNode = null;
@@ -329,6 +338,7 @@
         let hunger = 85;
         let wisdom = 70;
         let energy = 90;
+        let lastUpdated = Date.now();
 
         // What Wormy is currently saying, stored as a reference so it can be re-shown in the other language
         let speech = { type: 'key', key: 'intro' };
@@ -341,6 +351,10 @@
                 lvlBadge: 'Bookworm Desk v2.0',
                 babysitBadge: 'Babysitting mode 💌',
                 status: 'Feeling: Super Cozy',
+                statusPeckish: 'Feeling: A bit peckish',
+                statusSleepy: 'Feeling: Sleepy',
+                statusStory: 'Feeling: Craving a story',
+                statusDreaming: 'Feeling: Dreaming',
                 thoughtTag: "Wormy's Thought",
                 statHunger: 'Hunger',
                 statWisdom: 'Wisdom',
@@ -349,6 +363,7 @@
                 btnRead: 'Read',
                 btnSweep: 'Clean',
                 btnSleep: 'Bedtime',
+                btnWake: 'Wake up',
                 tarotTitle: 'Daily Reading Tarot',
                 tarotDesc: 'Spin for a gentle reading prompt & vibe of the day!',
                 tarotBtn: 'Spin Fortune ✨',
@@ -372,6 +387,11 @@
                 sweep: 'All clean! Desk is tidy for reading! 🧹',
                 sleep: 'Shhh... Wormy is taking a cozy catnap! 🌙 Zzz...',
                 wake: 'Good morning! Ready to read? ☀️',
+                stillSleeping: 'Zzz… Wormy is still napping. Tap "Wake up" whenever you like 🌙',
+                welcomeCozy: 'Welcome back! I kept the book stack warm for you 📚',
+                welcomePeckish: "Welcome back! I'm a little peckish… boba, maybe? 🧋",
+                welcomeSleepy: 'Welcome back! I could use a cozy nap soon 🌙',
+                welcomeStory: 'Welcome back! Read me something? Even one page counts 📖',
                 babysitWelcome: 'Hi! {name} asked you to look after me while they read 📚 Be gentle with me! 💖',
                 friendFallback: 'Your friend',
                 quotes: [
@@ -394,6 +414,10 @@
                 lvlBadge: 'โต๊ะหนอนหนังสือ v2.0',
                 babysitBadge: 'โหมดฝากเลี้ยง 💌',
                 status: 'อารมณ์: สบายใจสุดๆ',
+                statusPeckish: 'อารมณ์: หิวนิดๆ',
+                statusSleepy: 'อารมณ์: ง่วงนิดหน่อย',
+                statusStory: 'อารมณ์: อยากอ่านอะไรใหม่ๆ',
+                statusDreaming: 'อารมณ์: กำลังฝันดี',
                 thoughtTag: 'Wormy คิดว่า…',
                 statHunger: 'ความอิ่ม',
                 statWisdom: 'ปัญญา',
@@ -402,6 +426,7 @@
                 btnRead: 'อ่านคำคม',
                 btnSweep: 'เก็บโต๊ะ',
                 btnSleep: 'เข้านอน',
+                btnWake: 'ตื่นนอน',
                 tarotTitle: 'สุ่มดวงการอ่านประจำวัน',
                 tarotDesc: 'สุ่มรับคำแนะนำการอ่านเบาๆ และไวบ์ประจำวัน!',
                 tarotBtn: 'สุ่มดวงเลย ✨',
@@ -425,6 +450,11 @@
                 sweep: 'เก็บโต๊ะเรียบร้อย พร้อมอ่านหนังสือแล้ว! 🧹',
                 sleep: 'ชู่ว์... Wormy กำลังงีบหลับพักผ่อน! 🌙 Zzz...',
                 wake: 'อรุณสวัสดิ์! พร้อมอ่านหนังสือหรือยัง? ☀️',
+                stillSleeping: 'Zzz… Wormy ยังงีบอยู่ อยากปลุกเมื่อไหร่ก็กด "ตื่นนอน" ได้เลย 🌙',
+                welcomeCozy: 'กลับมาแล้ว! เราอุ่นกองหนังสือรอไว้ให้แล้วนะ 📚',
+                welcomePeckish: 'กลับมาแล้ว! เราเริ่มหิวนิดๆ ขอชานมสักแก้วได้ไหม? 🧋',
+                welcomeSleepy: 'กลับมาแล้ว! เราเริ่มง่วงแล้ว ของีบสักหน่อยนะ 🌙',
+                welcomeStory: 'กลับมาแล้ว! อ่านอะไรให้ฟังหน่อยได้ไหม? แค่หน้าเดียวก็ดีแล้ว 📖',
                 babysitWelcome: 'สวัสดี! {name} ฝากให้คุณช่วยดูแลเราระหว่างที่เขาอ่านหนังสือ 📚 ฝากตัวด้วยนะ 💖',
                 friendFallback: 'เพื่อนของคุณ',
                 quotes: [
@@ -447,45 +477,39 @@
         function petWorm(e) {
             playSynthSound('pop');
             spawnHeart(e);
+            applyDrift();
             wisdom = Math.min(100, wisdom + 5);
-            updateBars();
-            say({ type: 'key', key: 'pet' });
+            afterAction({ type: 'key', key: 'pet' });
         }
 
         function feedMenu() {
             playSynthSound('munch');
+            applyDrift();
             hunger = Math.min(100, hunger + 20);
-            updateBars();
-            say({ type: 'key', key: 'feed' });
+            afterAction({ type: 'key', key: 'feed' });
         }
 
         function readAction() {
             playSynthSound('pop');
+            applyDrift();
             wisdom = Math.min(100, wisdom + 15);
-            updateBars();
-            say({ type: 'quote', i: Math.floor(Math.random() * STR.EN.quotes.length) });
+            afterAction({ type: 'quote', i: Math.floor(Math.random() * STR.EN.quotes.length) });
         }
 
         function sweepAction() {
             playSynthSound('sweep');
+            applyDrift();
             energy = Math.min(100, energy + 10);
-            updateBars();
-            say({ type: 'key', key: 'sweep' });
+            afterAction({ type: 'key', key: 'sweep' });
         }
 
         function sleepAction() {
             playSynthSound('pop');
+            applyDrift(); // settle drift up to now before switching state
             isSleeping = !isSleeping;
-            const arena = document.getElementById('gameArena');
-            if (isSleeping) {
-                arena.classList.replace('bg-pop-lilac/30', 'bg-slate-900');
-                energy = 100;
-                say({ type: 'key', key: 'sleep' });
-            } else {
-                arena.classList.replace('bg-slate-900', 'bg-pop-lilac/30');
-                say({ type: 'key', key: 'wake' });
-            }
-            updateBars();
+            if (isSleeping) energy = 100;
+            setSleepVisual();
+            afterAction({ type: 'key', key: isSleeping ? 'sleep' : 'wake' });
         }
 
         function spinBookTarot() {
@@ -493,15 +517,123 @@
             say({ type: 'tarot', i: Math.floor(Math.random() * STR.EN.tarot.length) });
         }
 
+        // Shared tail for every care action: refresh the screen and save
+        function afterAction(speechObj) {
+            updateBars();
+            updateMood();
+            say(speechObj);
+            saveGame();
+        }
+
         function updateBars() {
-            document.getElementById('hungerVal').innerText = `${hunger}%`;
-            document.getElementById('hungerBar').style.width = `${hunger}%`;
+            const h = Math.round(hunger), w = Math.round(wisdom), en = Math.round(energy);
+            document.getElementById('hungerVal').innerText = `${h}%`;
+            document.getElementById('hungerBar').style.width = `${h}%`;
 
-            document.getElementById('wisdomVal').innerText = `${wisdom}%`;
-            document.getElementById('wisdomBar').style.width = `${wisdom}%`;
+            document.getElementById('wisdomVal').innerText = `${w}%`;
+            document.getElementById('wisdomBar').style.width = `${w}%`;
 
-            document.getElementById('energyVal').innerText = `${energy}%`;
-            document.getElementById('energyBar').style.width = `${energy}%`;
+            document.getElementById('energyVal').innerText = `${en}%`;
+            document.getElementById('energyBar').style.width = `${en}%`;
+        }
+
+        // ===== Gentle drift =====
+        function driftStat(value, amount) {
+            // Only drifts down, never below the floor, and never raises a stat that's already under it
+            return value > STAT_FLOOR ? Math.max(STAT_FLOOR, value - amount) : value;
+        }
+
+        // Brings stats up to date for the time passed since lastUpdated. Returns hours passed.
+        function applyDrift(now = Date.now()) {
+            const hours = (now - lastUpdated) / 3600000;
+            lastUpdated = now;
+            if (!(hours > 0)) return 0; // ignores clock changes that go backwards
+            hunger = driftStat(hunger, DRIFT_PER_HOUR.hunger * hours);
+            wisdom = driftStat(wisdom, DRIFT_PER_HOUR.wisdom * hours);
+            if (!isSleeping) energy = driftStat(energy, DRIFT_PER_HOUR.energy * hours); // energy rests while asleep
+            return hours;
+        }
+
+        // Which mood Wormy is in: cozy, peckish, sleepy, story, or dreaming
+        function currentMood() {
+            if (isSleeping) return 'dreaming';
+            const lows = [['peckish', hunger], ['sleepy', energy], ['story', wisdom]]
+                .filter(([, v]) => v < LOW_STAT)
+                .sort((a, b) => a[1] - b[1]);
+            return lows.length ? lows[0][0] : 'cozy';
+        }
+
+        const SMILE = 'M 160,74 Q 165,82 170,74';
+        const SOFT_SMILE = 'M 161,76 Q 165,79 169,76';
+        const MOOD_LOOK = {
+            cozy:     { icon: '☕', key: 'status',         mouth: SMILE },
+            peckish:  { icon: '🍪', key: 'statusPeckish',  mouth: SOFT_SMILE },
+            sleepy:   { icon: '😴', key: 'statusSleepy',   mouth: SOFT_SMILE },
+            story:    { icon: '📚', key: 'statusStory',    mouth: SOFT_SMILE },
+            dreaming: { icon: '🌙', key: 'statusDreaming', mouth: SMILE }
+        };
+
+        function updateMood() {
+            const look = MOOD_LOOK[currentMood()];
+            document.getElementById('statusIcon').textContent = look.icon;
+            const lbl = document.getElementById('lblStatus');
+            lbl.dataset.i18n = look.key;
+            lbl.textContent = STR[currentLang][look.key];
+            document.getElementById('wormMouth').setAttribute('d', look.mouth);
+        }
+
+        function welcomeKey() {
+            if (isSleeping) return 'stillSleeping';
+            return { cozy: 'welcomeCozy', peckish: 'welcomePeckish', sleepy: 'welcomeSleepy', story: 'welcomeStory' }[currentMood()];
+        }
+
+        function setSleepVisual() {
+            const arena = document.getElementById('gameArena');
+            arena.classList.toggle('bg-slate-900', isSleeping);
+            arena.classList.toggle('bg-pop-lilac/30', !isSleeping);
+            const lbl = document.getElementById('lblSleep');
+            lbl.dataset.i18n = isSleeping ? 'btnWake' : 'btnSleep';
+            lbl.textContent = STR[currentLang][lbl.dataset.i18n];
+        }
+
+        // Runs every minute while the page is open, and whenever the visitor comes back to the tab
+        function tick(showWelcome) {
+            const hours = applyDrift();
+            updateBars();
+            updateMood();
+            if (showWelcome && hours >= WELCOME_AFTER_HOURS && !isBabysitMode) {
+                say({ type: 'key', key: welcomeKey() });
+            }
+            saveGame();
+        }
+
+        // ===== Saving in this browser =====
+        function saveGame() {
+            if (!canSave) return;
+            try {
+                localStorage.setItem(SAVE_KEY, JSON.stringify({
+                    hunger, wisdom, energy, isSleeping, lang: currentLang, lastUpdated
+                }));
+            } catch (err) {} // storage blocked (e.g. private mode): the game still works, it just won't remember
+        }
+
+        function loadGame() {
+            try {
+                const raw = localStorage.getItem(SAVE_KEY);
+                if (!raw) return null;
+                const d = JSON.parse(raw);
+                const num = (v, fb) => (typeof v === 'number' && isFinite(v)) ? Math.max(0, Math.min(100, v)) : fb;
+                return {
+                    hunger: num(d.hunger, hunger),
+                    wisdom: num(d.wisdom, wisdom),
+                    energy: num(d.energy, energy),
+                    isSleeping: d.isSleeping === true,
+                    lang: d.lang === 'TH' ? 'TH' : 'EN',
+                    lastUpdated: (typeof d.lastUpdated === 'number' && d.lastUpdated <= Date.now()) ? d.lastUpdated : Date.now()
+                };
+            } catch (err) {
+                return null; // unreadable save: start fresh
+            }
         }
 
         // ===== Speech bubble =====
@@ -542,6 +674,7 @@
         function toggleLanguage() {
             currentLang = currentLang === 'EN' ? 'TH' : 'EN';
             applyLanguage();
+            saveGame();
         }
 
         // ===== Hearts & sounds =====
@@ -637,9 +770,9 @@
         function buildBabysitUrl() {
             const params = new URLSearchParams({
                 babysit: '1',
-                h: String(hunger),
-                w: String(wisdom),
-                e: String(energy),
+                h: String(Math.round(hunger)),
+                w: String(Math.round(wisdom)),
+                e: String(Math.round(energy)),
                 lang: currentLang
             });
             const name = cleanName(document.getElementById('babysitName').value);
@@ -658,6 +791,8 @@
         }
 
         function openBabysitModal() {
+            applyDrift();
+            updateBars();
             resetCopyLabel();
             refreshShareUrl(); // always uses Wormy's stats at this moment
             const modal = document.getElementById('shareModal');
@@ -719,7 +854,7 @@
             if (e.key === 'Escape') closeBabysitModal();
         });
 
-        // ===== Start-up: read babysit links and language from the address =====
+        // ===== Start-up =====
         function clampStat(value, fallback) {
             const n = parseInt(value, 10);
             return Number.isFinite(n) ? Math.max(0, Math.min(100, n)) : fallback;
@@ -727,20 +862,55 @@
 
         (function init() {
             const params = new URLSearchParams(window.location.search);
-            if (params.get('lang') === 'TH') currentLang = 'TH';
 
             if (params.get('babysit') === '1') {
+                // A friend's Wormy: stats come from the link, and nothing is saved
                 isBabysitMode = true;
+                canSave = false;
                 hunger = clampStat(params.get('h'), hunger);
                 wisdom = clampStat(params.get('w'), wisdom);
                 energy = clampStat(params.get('e'), energy);
                 babysitFrom = cleanName(params.get('from'));
                 document.getElementById('lblLvl').dataset.i18n = 'babysitBadge';
                 speech = { type: 'key', key: 'babysitWelcome' };
+            } else {
+                const saved = loadGame();
+                if (saved) {
+                    hunger = saved.hunger;
+                    wisdom = saved.wisdom;
+                    energy = saved.energy;
+                    isSleeping = saved.isSleeping;
+                    currentLang = saved.lang;
+                    lastUpdated = saved.lastUpdated;
+                }
+
+                // Preview tool for testing: ?preview_hours=24 shows Wormy as if you'd been away 24 hours, without saving
+                const preview = parseFloat(params.get('preview_hours'));
+                if (preview > 0) {
+                    canSave = false;
+                    lastUpdated = Date.now() - Math.min(preview, 24 * 30) * 3600000;
+                }
+
+                const hoursAway = applyDrift();
+                if ((saved || preview > 0) && (hoursAway >= WELCOME_AFTER_HOURS || isSleeping)) {
+                    speech = { type: 'key', key: welcomeKey() };
+                }
             }
 
+            if (params.get('lang') === 'TH') currentLang = 'TH';
+            if (params.get('lang') === 'EN') currentLang = 'EN';
+
+            setSleepVisual();
             updateBars();
+            updateMood();
             applyLanguage();
+            saveGame();
+
+            setInterval(() => tick(false), 60000);
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') tick(true);
+                else saveGame();
+            });
         })();
     </script>
 </body>
