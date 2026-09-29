@@ -505,8 +505,7 @@
             playSynthSound('pop');
             spawnHeart(e);
             applyDrift();
-            wisdom = Math.min(100, wisdom + 5);
-            afterAction({ type: 'key', key: 'pet' });
+            afterAction({ type: 'key', key: 'pet' }); // petting is pure affection: no stat changes
         }
 
         function feedMenu() {
