@@ -50,6 +50,23 @@
             background-image: radial-gradient(#18181B 1.2px, transparent 1.2px);
             background-size: 24px 24px;
             user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* Text fields must stay typeable/selectable (iOS Safari blocks typing otherwise) */
+        input, textarea {
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        /* Thai: more line-height so tone marks and vowels don't clip, and no letter-spacing */
+        html[lang="th"] p,
+        html[lang="th"] h3,
+        html[lang="th"] h4 {
+            line-height: 1.6;
+        }
+        html[lang="th"] .tracking-wider {
+            letter-spacing: 0;
         }
 
         .border-brutal {
@@ -99,9 +116,9 @@
         <div class="flex items-center gap-2 sm:gap-3">
             <button id="rainBtn" onclick="toggleRain()" 
                     class="btn-brutal bg-pop-lilac border-brutal px-3.5 py-2.5 rounded-2xl text-xs font-bold shadow-hard flex items-center gap-1.5">
-                <span id="rainIcon">🎧</span> <span id="rainLabel">Lo-Fi Rain</span>
+                <span id="rainIcon">🎧</span> <span id="rainLabel" data-i18n="rainLabel">Lo-Fi Rain</span>
             </button>
-            <button onclick="toggleLanguage()" id="langBtn" 
+            <button onclick="toggleLanguage()" id="langBtn" data-i18n="langBtn"
                     class="btn-brutal bg-white border-brutal px-3.5 py-2.5 rounded-2xl text-xs font-extrabold shadow-hard">
                 🇹🇭 TH
             </button>
@@ -113,10 +130,10 @@
         <!-- Sticker Top Bar -->
         <div class="w-full flex flex-wrap justify-between items-center gap-2 mb-4">
             <div class="bg-pop-matcha border-brutal px-3.5 py-1.5 rounded-2xl text-xs font-extrabold shadow-hard-sm flex items-center gap-1.5 animate-sticker">
-                <span>⭐</span> <span id="lblLvl">Bookworm Desk v2.0</span>
+                <span>⭐</span> <span id="lblLvl" data-i18n="lvlBadge">Bookworm Desk v2.0</span>
             </div>
             <div id="statusBadge" class="bg-pop-peach border-brutal px-3.5 py-1.5 rounded-2xl text-xs font-extrabold shadow-hard-sm flex items-center gap-1.5">
-                <span>☕</span> <span id="lblStatus">Feeling: Super Cozy</span>
+                <span>☕</span> <span id="lblStatus" data-i18n="status">Feeling: Super Cozy</span>
             </div>
         </div>
 
@@ -125,10 +142,10 @@
             
             <!-- Speech Bubble Floating Widget -->
             <div id="speechBox" class="w-full bg-white border-brutal p-3.5 rounded-2xl shadow-hard z-10 mb-3 text-center relative">
-                <div class="absolute -top-3 left-6 bg-pop-lemon border-brutal text-[10px] font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                <div class="absolute -top-3 left-6 bg-pop-lemon border-brutal text-[10px] font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider" data-i18n="thoughtTag">
                     Wormy's Thought
                 </div>
-                <p id="speechText" class="font-body text-xs sm:text-sm font-bold text-pop-ink mt-0.5">
+                <p id="speechText" class="font-body text-xs sm:text-sm font-bold text-pop-ink mt-0.5" aria-live="polite">
                     "Have you taken a cozy reading pause today? 📖"
                 </p>
             </div>
@@ -182,8 +199,8 @@
             <!-- Stat Progress Bars Grid -->
             <div class="w-full grid grid-cols-3 gap-2.5 mt-2">
                 <div class="bg-white border-2 border-black p-2.5 rounded-2xl shadow-hard-sm">
-                    <div class="flex justify-between text-[11px] font-extrabold mb-1">
-                        <span>🧋 Hunger</span>
+                    <div class="flex flex-wrap justify-between gap-x-1 text-[11px] font-extrabold mb-1">
+                        <span>🧋 <span data-i18n="statHunger">Hunger</span></span>
                         <span id="hungerVal">85%</span>
                     </div>
                     <div class="w-full bg-gray-100 h-3 rounded-full border border-black overflow-hidden">
@@ -192,8 +209,8 @@
                 </div>
 
                 <div class="bg-white border-2 border-black p-2.5 rounded-2xl shadow-hard-sm">
-                    <div class="flex justify-between text-[11px] font-extrabold mb-1">
-                        <span>📖 Wisdom</span>
+                    <div class="flex flex-wrap justify-between gap-x-1 text-[11px] font-extrabold mb-1">
+                        <span>📖 <span data-i18n="statWisdom">Wisdom</span></span>
                         <span id="wisdomVal">70%</span>
                     </div>
                     <div class="w-full bg-gray-100 h-3 rounded-full border border-black overflow-hidden">
@@ -202,8 +219,8 @@
                 </div>
 
                 <div class="bg-white border-2 border-black p-2.5 rounded-2xl shadow-hard-sm">
-                    <div class="flex justify-between text-[11px] font-extrabold mb-1">
-                        <span>⚡ Energy</span>
+                    <div class="flex flex-wrap justify-between gap-x-1 text-[11px] font-extrabold mb-1">
+                        <span>⚡ <span data-i18n="statEnergy">Energy</span></span>
                         <span id="energyVal">90%</span>
                     </div>
                     <div class="w-full bg-gray-100 h-3 rounded-full border border-black overflow-hidden">
@@ -217,22 +234,22 @@
         <div class="w-full grid grid-cols-4 gap-2.5 sm:gap-3.5 mb-6">
             <button onclick="feedMenu()" class="btn-brutal bg-pop-matcha border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
                 <span class="text-2xl mb-1">🧋</span>
-                <span class="font-extrabold text-xs" id="lblFeed">Snack</span>
+                <span class="font-extrabold text-xs text-center leading-snug" id="lblFeed" data-i18n="btnFeed">Snack</span>
             </button>
 
             <button onclick="readAction()" class="btn-brutal bg-pop-lemon border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
                 <span class="text-2xl mb-1">📖</span>
-                <span class="font-extrabold text-xs" id="lblRead">Read</span>
+                <span class="font-extrabold text-xs text-center leading-snug" id="lblRead" data-i18n="btnRead">Read</span>
             </button>
 
             <button onclick="sweepAction()" class="btn-brutal bg-pop-lilac border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
                 <span class="text-2xl mb-1">🧹</span>
-                <span class="font-extrabold text-xs" id="lblSweep">Clean</span>
+                <span class="font-extrabold text-xs text-center leading-snug" id="lblSweep" data-i18n="btnSweep">Clean</span>
             </button>
 
             <button onclick="sleepAction()" class="btn-brutal bg-pop-peach border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
                 <span class="text-2xl mb-1">🌙</span>
-                <span class="font-extrabold text-xs" id="lblSleep">Bedtime</span>
+                <span class="font-extrabold text-xs text-center leading-snug" id="lblSleep" data-i18n="btnSleep">Bedtime</span>
             </button>
         </div>
 
@@ -241,12 +258,12 @@
             <div class="flex items-center gap-3 text-center sm:text-left">
                 <span class="text-3xl bg-white p-3 rounded-2xl border-brutal shadow-hard-sm">🔮</span>
                 <div>
-                    <h3 class="font-display font-extrabold text-base sm:text-lg text-pop-ink" id="tarotTitle">Daily Reading Tarot</h3>
-                    <p class="text-xs text-pop-ink/80 font-medium" id="tarotDesc">Spin for a gentle reading prompt & vibe of the day!</p>
+                    <h3 class="font-display font-extrabold text-base sm:text-lg text-pop-ink" id="tarotTitle" data-i18n="tarotTitle">Daily Reading Tarot</h3>
+                    <p class="text-xs text-pop-ink/80 font-medium" id="tarotDesc" data-i18n="tarotDesc">Spin for a gentle reading prompt & vibe of the day!</p>
                 </div>
             </div>
             <button onclick="spinBookTarot()" class="btn-brutal bg-pop-tangerine text-white font-extrabold text-xs px-5 py-3 rounded-2xl border-brutal shadow-hard shrink-0">
-                <span id="btnTarot">Spin Fortune ✨</span>
+                <span id="btnTarot" data-i18n="tarotBtn">Spin Fortune ✨</span>
             </button>
         </div>
 
@@ -255,46 +272,57 @@
             <div class="flex items-center gap-3">
                 <span class="text-2xl bg-pop-peach p-2.5 rounded-2xl border-brutal shadow-hard-sm">💌</span>
                 <div>
-                    <h4 class="font-bold text-sm text-pop-ink" id="babysitTitle">Send Wormy to Babysit</h4>
-                    <p class="text-xs text-pop-ink/80 font-medium" id="babysitDesc">Share a custom link for friends to care for your worm!</p>
+                    <h4 class="font-bold text-sm text-pop-ink" id="babysitTitle" data-i18n="babysitTitle">Send Wormy to Babysit</h4>
+                    <p class="text-xs text-pop-ink/80 font-medium" id="babysitDesc" data-i18n="babysitDesc">Share a custom link for friends to care for your worm!</p>
                 </div>
             </div>
             <button onclick="openBabysitModal()" class="btn-brutal bg-pop-matcha text-pop-ink font-extrabold text-xs px-4 py-2.5 rounded-2xl border-brutal shadow-hard shrink-0">
-                Share 🔗
+                <span data-i18n="shareBtn">Share 🔗</span>
             </button>
         </div>
 
     </main>
 
     <!-- Share / Babysit Modal -->
-    <div id="shareModal" class="fixed inset-0 bg-black/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+    <div id="shareModal" onclick="if (event.target === this) closeBabysitModal()"
+         role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true"
+         class="fixed inset-0 bg-black/60 z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
         <div class="bg-white border-brutal rounded-3xl p-6 max-w-sm w-full shadow-hard-lg">
             <div class="flex justify-between items-center mb-3">
-                <h3 class="font-display font-extrabold text-lg text-pop-ink">💌 Send to Babysit</h3>
-                <button onclick="closeBabysitModal()" class="text-lg font-extrabold text-pop-ink">✕</button>
+                <h3 id="modalTitle" class="font-display font-extrabold text-lg text-pop-ink" data-i18n="modalTitle">💌 Send Wormy to Babysit</h3>
+                <button onclick="closeBabysitModal()" aria-label="Close" data-i18n-aria="closeLabel" class="text-lg font-extrabold text-pop-ink px-1">✕</button>
             </div>
-            <p class="text-xs text-pop-ink/80 mb-4" id="modalDesc">Send this link to a friend so they can feed and play with Wormy while you read!</p>
-            
-            <div class="bg-pop-lemon/40 p-3 rounded-2xl border-brutal mb-4 break-all text-xs font-mono text-pop-ink" id="shareUrlBox">
-                https://readreadread.co/?pet=Wormy
-            </div>
+            <p class="text-xs text-pop-ink/80 mb-4" id="modalDesc" data-i18n="modalDesc">Send this link to a friend so they can look after Wormy while you read!</p>
+
+            <label for="babysitName" class="block text-[11px] font-extrabold text-pop-ink mb-1" data-i18n="nameLabel">Your name (optional)</label>
+            <input id="babysitName" type="text" maxlength="20" autocomplete="off" oninput="refreshShareUrl()"
+                   placeholder="e.g. Mint" data-i18n-placeholder="namePlaceholder"
+                   class="w-full bg-white border-brutal rounded-2xl px-3 py-2 text-base font-bold text-pop-ink mb-3 focus:outline-none focus:ring-4 focus:ring-pop-lilac">
+
+            <div class="bg-pop-lemon/40 p-3 rounded-2xl border-brutal mb-2 break-all text-xs font-mono text-pop-ink select-all" id="shareUrlBox"></div>
+            <p class="text-[11px] text-pop-ink/70 mb-4" data-i18n="modalNote">Your friend gets Wormy with its current stats. Their care won't sync back to you yet.</p>
 
             <button onclick="copyBabysitUrl()" class="btn-brutal w-full bg-pop-matcha text-pop-ink font-extrabold text-sm py-3 rounded-2xl border-brutal shadow-hard">
-                📋 Copy Babysit Link
+                <span id="copyLabel" data-i18n="copyBtn">📋 Copy babysit link</span>
             </button>
         </div>
     </div>
 
     <!-- Footer -->
     <footer class="mt-8 text-center text-xs font-extrabold text-pop-ink/60">
-        Crafted for <a href="https://readreadread.co/" class="underline text-pop-ink">readreadread.co</a> ☕
+        <span data-i18n="footerPrefix">Crafted for</span> <a href="https://readreadread.co/" target="_blank" rel="noopener noreferrer" class="underline text-pop-ink">readreadread.co</a> ☕
     </footer>
 
     <!-- Logic Script -->
     <script>
+        // Where babysit links point. This is the live game address on GitHub Pages.
+        const GAME_URL = 'https://pk-kunlanan.github.io/readreadread-game/';
+
         let currentLang = 'EN';
         let isRainPlaying = false;
         let isSleeping = false;
+        let isBabysitMode = false;
+        let babysitFrom = '';
         let audioCtx = null;
         let rainNode = null;
 
@@ -302,67 +330,147 @@
         let wisdom = 70;
         let energy = 90;
 
-        const quotes = {
-            EN: [
-                "Read a page today? 📖 Or maybe take a sip of water? ☕",
-                "Reading 3 pages right now is better than 0 pages! 🌿",
-                "Take a gentle breath and relax your shoulders. ✨",
-                "Cozy reading time is always well spent! ☕",
-                "Be kind to yourself today—you're doing great! 🧸"
-            ],
-            TH: [
-                "วันนี้อ่านหนังสือสักหน้าหรือยัง? 📖 หรือจิบน้ำอุ่นๆ กัน? ☕",
-                "อ่านแค่วันละ 3 หน้า ก็เก่งมากแล้วนะ! 🌿",
-                "หายใจเข้าลึกๆ แล้วผ่อนคลายไหล่ลงนะ ✨",
-                "ช่วงเวลาอ่านหนังสือนุ่มฟูเสมอ! ☕",
-                "ใจดีกับตัวเองในวันนี้ด้วยนะ คุณทำได้ดีแล้ว! 🧸"
-            ]
+        // What Wormy is currently saying, stored as a reference so it can be re-shown in the other language
+        let speech = { type: 'key', key: 'intro' };
+
+        // ===== ALL TEXT LIVES HERE (English + Thai) =====
+        const STR = {
+            EN: {
+                langBtn: '🇹🇭 TH',
+                rainLabel: 'Lo-Fi Rain',
+                lvlBadge: 'Bookworm Desk v2.0',
+                babysitBadge: 'Babysitting mode 💌',
+                status: 'Feeling: Super Cozy',
+                thoughtTag: "Wormy's Thought",
+                statHunger: 'Hunger',
+                statWisdom: 'Wisdom',
+                statEnergy: 'Energy',
+                btnFeed: 'Snack',
+                btnRead: 'Read',
+                btnSweep: 'Clean',
+                btnSleep: 'Bedtime',
+                tarotTitle: 'Daily Reading Tarot',
+                tarotDesc: 'Spin for a gentle reading prompt & vibe of the day!',
+                tarotBtn: 'Spin Fortune ✨',
+                babysitTitle: 'Send Wormy to Babysit',
+                babysitDesc: 'Share a custom link for friends to care for your worm!',
+                shareBtn: 'Share 🔗',
+                modalTitle: '💌 Send Wormy to Babysit',
+                modalDesc: 'Send this link to a friend so they can look after Wormy while you read!',
+                nameLabel: 'Your name (optional)',
+                namePlaceholder: 'e.g. Mint',
+                modalNote: "Your friend gets Wormy with its current stats. Their care won't sync back to you yet.",
+                copyBtn: '📋 Copy babysit link',
+                copied: '✅ Link copied!',
+                copyFailed: 'Press and hold the link above to copy it',
+                closeLabel: 'Close',
+                footerPrefix: 'Crafted for',
+
+                intro: '"Have you taken a cozy reading pause today? 📖"',
+                pet: 'Wormy loves headpats! 💖',
+                feed: 'Yum! Boba tea & matcha latte are delicious! 🧋',
+                sweep: 'All clean! Desk is tidy for reading! 🧹',
+                sleep: 'Shhh... Wormy is taking a cozy catnap! 🌙 Zzz...',
+                wake: 'Good morning! Ready to read? ☀️',
+                babysitWelcome: 'Hi! {name} asked you to look after me while they read 📚 Be gentle with me! 💖',
+                friendFallback: 'Your friend',
+                quotes: [
+                    "Read a page today? 📖 Or maybe take a sip of water? ☕",
+                    "Reading 3 pages right now is better than 0 pages! 🌿",
+                    "Take a gentle breath and relax your shoulders. ✨",
+                    "Cozy reading time is always well spent! ☕",
+                    "Be kind to yourself today—you're doing great! 🧸"
+                ],
+                tarot: [
+                    "🔮 Tarot: Read 5 pages of something that makes you smile today!",
+                    "🔮 Tarot: Sip a warm tea and enjoy a graphic novel chapter ☕",
+                    "🔮 Tarot: Bookmark a page you love and share it with a friend 🔖",
+                    "🔮 Tarot: Take a 10-minute digital detox & read offline 🌿"
+                ]
+            },
+            TH: {
+                langBtn: '🇬🇧 EN',
+                rainLabel: 'เสียงฝน',
+                lvlBadge: 'โต๊ะหนอนหนังสือ v2.0',
+                babysitBadge: 'โหมดฝากเลี้ยง 💌',
+                status: 'อารมณ์: สบายใจสุดๆ',
+                thoughtTag: 'Wormy คิดว่า…',
+                statHunger: 'ความอิ่ม',
+                statWisdom: 'ปัญญา',
+                statEnergy: 'พลังงาน',
+                btnFeed: 'ป้อนขนม',
+                btnRead: 'อ่านคำคม',
+                btnSweep: 'เก็บโต๊ะ',
+                btnSleep: 'เข้านอน',
+                tarotTitle: 'สุ่มดวงการอ่านประจำวัน',
+                tarotDesc: 'สุ่มรับคำแนะนำการอ่านเบาๆ และไวบ์ประจำวัน!',
+                tarotBtn: 'สุ่มดวงเลย ✨',
+                babysitTitle: 'ส่ง Wormy ให้เพื่อนฝากเลี้ยง',
+                babysitDesc: 'สร้างลิงก์ให้เพื่อนช่วยดูแล Wormy ระหว่างที่คุณอ่านหนังสือ',
+                shareBtn: 'แชร์ 🔗',
+                modalTitle: '💌 ฝากเพื่อนเลี้ยง Wormy',
+                modalDesc: 'ส่งลิงก์นี้ให้เพื่อน เพื่อให้เพื่อนช่วยดูแล Wormy ระหว่างที่คุณอ่านหนังสือ!',
+                nameLabel: 'ชื่อของคุณ (ไม่บังคับ)',
+                namePlaceholder: 'เช่น มิ้นท์',
+                modalNote: 'เพื่อนจะได้ดูแล Wormy พร้อมค่าสถานะตอนนี้ แต่การดูแลของเพื่อนจะยังไม่ซิงก์กลับมาที่คุณนะ',
+                copyBtn: '📋 คัดลอกลิงก์ฝากเลี้ยง',
+                copied: '✅ คัดลอกลิงก์แล้ว!',
+                copyFailed: 'กดค้างที่ลิงก์ด้านบนเพื่อคัดลอก',
+                closeLabel: 'ปิด',
+                footerPrefix: 'ทำด้วยใจให้',
+
+                intro: '"วันนี้ได้พักอ่านหนังสือสบายๆ บ้างหรือยัง? 📖"',
+                pet: 'ลูบหัว Wormy แล้วอารมณ์ดีเลย! 💖',
+                feed: 'อร่อยจัง! ได้ชานมไข่มุกกับมัทฉะลาเต้แล้วพลังมาเต็ม! 🧋',
+                sweep: 'เก็บโต๊ะเรียบร้อย พร้อมอ่านหนังสือแล้ว! 🧹',
+                sleep: 'ชู่ว์... Wormy กำลังงีบหลับพักผ่อน! 🌙 Zzz...',
+                wake: 'อรุณสวัสดิ์! พร้อมอ่านหนังสือหรือยัง? ☀️',
+                babysitWelcome: 'สวัสดี! {name} ฝากให้คุณช่วยดูแลเราระหว่างที่เขาอ่านหนังสือ 📚 ฝากตัวด้วยนะ 💖',
+                friendFallback: 'เพื่อนของคุณ',
+                quotes: [
+                    "วันนี้อ่านหนังสือสักหน้าหรือยัง? 📖 หรือจิบน้ำอุ่นๆ กัน? ☕",
+                    "อ่านแค่ 3 หน้าตอนนี้ ก็ดีกว่าไม่ได้อ่านเลยนะ! 🌿",
+                    "หายใจเข้าลึกๆ แล้วผ่อนคลายไหล่ลงนะ ✨",
+                    "เวลาที่ได้อ่านหนังสือสบายๆ ไม่เคยเสียเปล่าเลย! ☕",
+                    "ใจดีกับตัวเองในวันนี้ด้วยนะ คุณทำได้ดีแล้ว! 🧸"
+                ],
+                tarot: [
+                    "🔮 ดูดวงการอ่าน: อ่านหนังสือที่ทำให้คุณยิ้มได้สัก 5 หน้าวันนี้!",
+                    "🔮 ดูดวงการอ่าน: จิบชาอุ่นๆ แล้วอ่านการ์ตูนช่องสนุกๆ สักตอน ☕",
+                    "🔮 ดูดวงการอ่าน: คั่นหน้าที่คุณชอบแล้วส่งให้เพื่อนดู 🔖",
+                    "🔮 ดูดวงการอ่าน: พักจอ 10 นาทีแล้วหยิบหนังสือเล่มโปรดขึ้นมาอ่าน 🌿"
+                ]
+            }
         };
 
-        const tarotPrompts = {
-            EN: [
-                "🔮 Tarot: Read 5 pages of something that makes you smile today!",
-                "🔮 Tarot: Sip a warm tea and enjoy a graphic novel chapter ☕",
-                "🔮 Tarot: Bookmark a page you love and share it with a friend 🔖",
-                "🔮 Tarot: Take a 10-minute digital detox & read offline 🌿"
-            ],
-            TH: [
-                "🔮 ดูดวงการอ่าน: อ่านหนังสือที่ทำให้คุณยิ้มได้สัก 5 หน้าวันนี้!",
-                "🔮 ดูดวงการอ่าน: จิบชาอุ่นๆ แล้วอ่านการ์ตูนช่องสนุกๆ สักตอน ☕",
-                "🔮 ดูดวงการอ่าน: คั่นหน้าที่คุณชอบแล้วส่งให้เพื่อนดู 🔖",
-                "🔮 ดูดวงการอ่าน: พักจอ 10 นาทีแล้วหยิบหนังสือเล่มโปรดขึ้นมาอ่าน 🌿"
-            ]
-        };
-
+        // ===== Care actions =====
         function petWorm(e) {
             playSynthSound('pop');
             spawnHeart(e);
             wisdom = Math.min(100, wisdom + 5);
             updateBars();
-            setSpeech(currentLang === 'EN' ? "Wormy loves headpats! 💖" : "ลูบหัว Wormy แล้วอารมณ์ดีเลย! 💖");
+            say({ type: 'key', key: 'pet' });
         }
 
         function feedMenu() {
             playSynthSound('munch');
             hunger = Math.min(100, hunger + 20);
             updateBars();
-            setSpeech(currentLang === 'EN' ? "Yum! Boba tea & matcha latte are delicious! 🧋" : "อร่อยมาก! ได้ชานมไข่มุกแล้วพลังมาเต็ม!");
+            say({ type: 'key', key: 'feed' });
         }
 
         function readAction() {
             playSynthSound('pop');
             wisdom = Math.min(100, wisdom + 15);
             updateBars();
-            const qList = quotes[currentLang];
-            const randomQ = qList[Math.floor(Math.random() * qList.length)];
-            setSpeech(randomQ);
+            say({ type: 'quote', i: Math.floor(Math.random() * STR.EN.quotes.length) });
         }
 
         function sweepAction() {
             playSynthSound('sweep');
             energy = Math.min(100, energy + 10);
             updateBars();
-            setSpeech(currentLang === 'EN' ? "All clean! Desk is tidy for reading! 🧹" : "โต๊ะสะอาดพร้อมอ่านหนังสือแล้ว!");
+            say({ type: 'key', key: 'sweep' });
         }
 
         function sleepAction() {
@@ -372,19 +480,17 @@
             if (isSleeping) {
                 arena.classList.replace('bg-pop-lilac/30', 'bg-slate-900');
                 energy = 100;
-                setSpeech(currentLang === 'EN' ? "Shhh... Wormy is taking a cozy catnap! 🌙 Zzz..." : "ชูว์... Wormy กำลังงีบหลับพักผ่อน! 🌙 Zzz...");
+                say({ type: 'key', key: 'sleep' });
             } else {
                 arena.classList.replace('bg-slate-900', 'bg-pop-lilac/30');
-                setSpeech(currentLang === 'EN' ? "Good morning! Ready to read? ☀️" : "อรุณสวัสดิ์! พร้อมอ่านหนังสือหรือยัง? ☀️");
+                say({ type: 'key', key: 'wake' });
             }
             updateBars();
         }
 
         function spinBookTarot() {
             playSynthSound('pop');
-            const list = tarotPrompts[currentLang];
-            const result = list[Math.floor(Math.random() * list.length)];
-            setSpeech(result);
+            say({ type: 'tarot', i: Math.floor(Math.random() * STR.EN.tarot.length) });
         }
 
         function updateBars() {
@@ -398,10 +504,47 @@
             document.getElementById('energyBar').style.width = `${energy}%`;
         }
 
-        function setSpeech(msg) {
-            document.getElementById('speechText').innerText = msg;
+        // ===== Speech bubble =====
+        function say(obj) {
+            speech = obj;
+            renderSpeech();
         }
 
+        function renderSpeech() {
+            const t = STR[currentLang];
+            let msg;
+            if (speech.type === 'quote') msg = t.quotes[speech.i];
+            else if (speech.type === 'tarot') msg = t.tarot[speech.i];
+            else msg = t[speech.key];
+            msg = msg.replace('{name}', babysitFrom || t.friendFallback);
+            // textContent (not innerHTML) so a name from a link can never inject code
+            document.getElementById('speechText').textContent = msg;
+        }
+
+        // ===== Language =====
+        function applyLanguage() {
+            const t = STR[currentLang];
+            document.documentElement.lang = currentLang === 'TH' ? 'th' : 'en';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const v = t[el.dataset.i18n];
+                if (v !== undefined) el.textContent = v;
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                el.placeholder = t[el.dataset.i18nPlaceholder];
+            });
+            document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+                el.setAttribute('aria-label', t[el.dataset.i18nAria]);
+            });
+            renderSpeech();
+            refreshShareUrl();
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'EN' ? 'TH' : 'EN';
+            applyLanguage();
+        }
+
+        // ===== Hearts & sounds =====
         function spawnHeart(e) {
             const room = document.getElementById('gameArena');
             const rect = room.getBoundingClientRect();
@@ -486,40 +629,119 @@
             } catch (err) {}
         }
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'EN' ? 'TH' : 'EN';
-            document.getElementById('langBtn').innerText = currentLang === 'EN' ? '🇹🇭 TH' : '🇬🇧 EN';
-            document.getElementById('rainLabel').innerText = currentLang === 'EN' ? 'Lo-Fi Rain' : 'เสียงฝน';
-            document.getElementById('lblFeed').innerText = currentLang === 'EN' ? 'Snack' : 'ป้อนขนม';
-            document.getElementById('lblRead').innerText = currentLang === 'EN' ? 'Read' : 'อ่านโควท';
-            document.getElementById('lblSweep').innerText = currentLang === 'EN' ? 'Clean' : 'ทำความสะอาด';
-            document.getElementById('lblSleep').innerText = currentLang === 'EN' ? 'Bedtime' : 'เข้านอน';
-            document.getElementById('tarotTitle').innerText = currentLang === 'EN' ? 'Daily Reading Tarot' : 'สุ่มดวงการอ่านประจำวัน';
-            document.getElementById('tarotDesc').innerText = currentLang === 'EN' ? 'Spin for a gentle reading prompt & vibe of the day!' : 'หมุนเพื่อรับคำแนะนำการอ่านประจำวัน!';
-            document.getElementById('btnTarot').innerText = currentLang === 'EN' ? 'Spin Fortune ✨' : 'สุ่มดวงเลย ✨';
-            document.getElementById('babysitTitle').innerText = currentLang === 'EN' ? 'Send Wormy to Babysit' : 'ส่ง Wormy ให้เพื่อนฝากเลี้ยง';
-            document.getElementById('babysitDesc').innerText = currentLang === 'EN' ? 'Share a custom link for friends to care for your worm!' : 'สร้างลิงก์ให้เพื่อนช่วยดูแล Wormy ระหว่างที่คุณอ่านหนังสือ';
-            setSpeech(quotes[currentLang][0]);
+        // ===== Babysit link =====
+        function cleanName(raw) {
+            return (raw || '').replace(/\s+/g, ' ').trim().slice(0, 20);
+        }
+
+        function buildBabysitUrl() {
+            const params = new URLSearchParams({
+                babysit: '1',
+                h: String(hunger),
+                w: String(wisdom),
+                e: String(energy),
+                lang: currentLang
+            });
+            const name = cleanName(document.getElementById('babysitName').value);
+            if (name) params.set('from', name);
+            return GAME_URL + '?' + params.toString();
+        }
+
+        function refreshShareUrl() {
+            document.getElementById('shareUrlBox').textContent = buildBabysitUrl();
+        }
+
+        function resetCopyLabel() {
+            const lbl = document.getElementById('copyLabel');
+            lbl.dataset.i18n = 'copyBtn';
+            lbl.textContent = STR[currentLang].copyBtn;
         }
 
         function openBabysitModal() {
-            document.getElementById('shareModal').classList.remove('opacity-0', 'pointer-events-none');
+            resetCopyLabel();
+            refreshShareUrl(); // always uses Wormy's stats at this moment
+            const modal = document.getElementById('shareModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.setAttribute('aria-hidden', 'false');
         }
 
         function closeBabysitModal() {
-            document.getElementById('shareModal').classList.add('opacity-0', 'pointer-events-none');
+            const modal = document.getElementById('shareModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.setAttribute('aria-hidden', 'true');
         }
 
-        function copyBabysitUrl() {
-            const tempInput = document.createElement('input');
-            tempInput.value = "https://readreadread.co/?pet=WormyBeanie";
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            alert(currentLang === 'EN' ? "📋 Link copied to clipboard!" : "📋 คัดลอกลิงก์เรียบร้อยแล้ว!");
-            closeBabysitModal();
+        async function copyBabysitUrl() {
+            const url = buildBabysitUrl();
+            let ok = false;
+
+            // Modern clipboard first (may be blocked inside the website's iframe)
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(url);
+                    ok = true;
+                }
+            } catch (err) {}
+
+            // Older fallback that usually still works inside an iframe
+            if (!ok) {
+                try {
+                    const ta = document.createElement('textarea');
+                    ta.value = url;
+                    ta.setAttribute('readonly', '');
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    ok = document.execCommand('copy');
+                    document.body.removeChild(ta);
+                } catch (err) {}
+            }
+
+            const lbl = document.getElementById('copyLabel');
+            lbl.dataset.i18n = ok ? 'copied' : 'copyFailed';
+            lbl.textContent = STR[currentLang][lbl.dataset.i18n];
+
+            if (ok) {
+                setTimeout(() => { closeBabysitModal(); resetCopyLabel(); }, 1200);
+            } else {
+                // Highlight the link so the person can copy it by hand
+                const box = document.getElementById('shareUrlBox');
+                const range = document.createRange();
+                range.selectNodeContents(box);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
         }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeBabysitModal();
+        });
+
+        // ===== Start-up: read babysit links and language from the address =====
+        function clampStat(value, fallback) {
+            const n = parseInt(value, 10);
+            return Number.isFinite(n) ? Math.max(0, Math.min(100, n)) : fallback;
+        }
+
+        (function init() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('lang') === 'TH') currentLang = 'TH';
+
+            if (params.get('babysit') === '1') {
+                isBabysitMode = true;
+                hunger = clampStat(params.get('h'), hunger);
+                wisdom = clampStat(params.get('w'), wisdom);
+                energy = clampStat(params.get('e'), energy);
+                babysitFrom = cleanName(params.get('from'));
+                document.getElementById('lblLvl').dataset.i18n = 'babysitBadge';
+                speech = { type: 'key', key: 'babysitWelcome' };
+            }
+
+            updateBars();
+            applyLanguage();
+        })();
     </script>
 </body>
 </html>
