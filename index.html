@@ -125,23 +125,17 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between items-center p-4 sm:p-6 md:p-8">
+<body class="min-h-screen flex flex-col justify-start items-center p-3 sm:p-6 md:p-8">
 
     <!-- Header Navigation -->
-    <header class="w-full max-w-2xl flex justify-between items-center mb-6">
-        <a href="https://readreadread.co/" target="_blank" rel="noopener noreferrer" 
-           class="btn-brutal bg-pop-lemon border-brutal px-4 py-2.5 rounded-2xl shadow-hard flex items-center gap-2">
-            <span class="text-2xl" aria-hidden="true">🐛</span>
-            <span class="font-display font-extrabold text-lg sm:text-xl text-pop-ink">readreadread.co</span>
-        </a>
-
+    <header class="w-full max-w-2xl flex justify-end items-center mb-2 sm:mb-6">
         <div class="flex items-center gap-2 sm:gap-3">
             <button id="rainBtn" onclick="toggleRain()" aria-pressed="false" 
-                    class="btn-brutal bg-pop-lilac border-brutal px-3.5 py-2.5 rounded-2xl text-xs font-bold shadow-hard flex items-center gap-1.5">
+                    class="btn-brutal bg-pop-lilac border-brutal px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-2xl text-xs font-bold shadow-hard flex items-center gap-1.5">
                 <span id="rainIcon" aria-hidden="true">🎧</span> <span id="rainLabel" data-i18n="rainLabel">Lo-Fi Rain</span>
             </button>
             <button onclick="toggleLanguage()" id="langBtn" data-i18n="langBtn" data-i18n-aria="langBtnAria" aria-label="เปลี่ยนเป็นภาษาไทย"
-                    class="btn-brutal bg-white border-brutal px-3.5 py-2.5 rounded-2xl text-xs font-extrabold shadow-hard">
+                    class="btn-brutal bg-white border-brutal px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-2xl text-xs font-extrabold shadow-hard">
                 🇹🇭 TH
             </button>
         </div>
@@ -150,20 +144,20 @@
     <main class="w-full max-w-2xl flex flex-col items-center">
 
         <!-- Sticker Top Bar -->
-        <div class="w-full flex flex-wrap justify-between items-center gap-2 mb-4">
-            <div class="bg-pop-matcha border-brutal px-3.5 py-1.5 rounded-2xl text-xs font-extrabold shadow-hard-sm flex items-center gap-1.5 animate-sticker">
+        <div class="w-full flex flex-wrap items-center gap-x-2 gap-y-1.5 sm:justify-between mb-2 sm:mb-4">
+            <div class="bg-pop-matcha border-brutal px-2 py-0.5 sm:px-3.5 sm:py-1.5 rounded-2xl text-[11px] sm:text-xs font-extrabold shadow-hard-sm flex items-center gap-1 sm:gap-1.5 whitespace-nowrap animate-sticker">
                 <span aria-hidden="true">⭐</span> <span id="lblLvl" data-i18n="lvlBadge">Bookworm Desk v2.0</span>
             </div>
-            <div id="statusBadge" class="bg-pop-peach border-brutal px-3.5 py-1.5 rounded-2xl text-xs font-extrabold shadow-hard-sm flex items-center gap-1.5">
+            <div id="statusBadge" class="bg-pop-peach border-brutal px-2 py-0.5 sm:px-3.5 sm:py-1.5 rounded-2xl text-[11px] sm:text-xs font-extrabold shadow-hard-sm flex items-center gap-1 sm:gap-1.5 whitespace-nowrap">
                 <span id="statusIcon" aria-hidden="true">☕</span> <span id="lblStatus" data-i18n="status">Feeling: Super Cozy</span>
             </div>
         </div>
 
         <!-- Main Pet Arena Card -->
-        <div id="gameArena" class="w-full bg-pop-lilac/30 border-brutal rounded-3xl p-5 mb-6 shadow-hard-lg flex flex-col items-center relative overflow-hidden transition-colors duration-300">
+        <div id="gameArena" class="w-full bg-pop-lilac/30 border-brutal rounded-3xl p-2.5 sm:p-5 mb-3.5 sm:mb-6 shadow-hard-lg flex flex-col items-center relative overflow-hidden transition-colors duration-300">
             
             <!-- Speech Bubble Floating Widget -->
-            <div id="speechBox" class="w-full bg-white border-brutal p-3.5 rounded-2xl shadow-hard z-10 mb-3 text-center relative">
+            <div id="speechBox" class="w-full bg-white border-brutal px-3 pt-3 pb-2 sm:p-3.5 rounded-2xl shadow-hard z-10 mt-1.5 sm:mt-0 mb-1 sm:mb-3 text-center relative">
                 <div class="absolute -top-3 left-6 bg-pop-lemon border-brutal text-[10px] font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider" data-i18n="thoughtTag">
                     Wormy's Thought
                 </div>
@@ -174,8 +168,8 @@
 
             <!-- Worm SVG Avatar (Beanie & Wire Glasses Variant) -->
             <div id="wormAvatar" onclick="petWorm(event)" onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); petWorm(null); }"
-                 role="button" tabindex="0" aria-label="Pet Wormy" data-i18n-aria="petAria" class="cursor-pointer my-2 z-10 animate-worm transition-transform active:scale-95 relative">
-                <svg width="230" height="160" viewBox="0 0 230 160" aria-hidden="true" focusable="false">
+                 role="button" tabindex="0" aria-label="Pet Wormy" data-i18n-aria="petAria" class="cursor-pointer my-0.5 sm:my-2 z-10 animate-worm transition-transform active:scale-95 relative">
+                <svg width="230" height="160" viewBox="0 0 230 160" aria-hidden="true" focusable="false" class="w-[140px] h-auto sm:w-[230px]">
                     <!-- Drop Shadow -->
                     <ellipse cx="115" cy="148" rx="70" ry="10" fill="#18181B" opacity="0.2"/>
                     
@@ -220,8 +214,8 @@
             </div>
 
             <!-- Stat Progress Bars Grid -->
-            <div class="w-full grid grid-cols-3 gap-2.5 mt-2">
-                <div class="bg-white border-2 border-black p-2.5 rounded-2xl shadow-hard-sm">
+            <div class="w-full grid grid-cols-3 gap-2 sm:gap-2.5 mt-1 sm:mt-2">
+                <div class="bg-white border-2 border-black px-2 py-1.5 sm:p-2.5 rounded-2xl shadow-hard-sm">
                     <div class="flex flex-wrap justify-between gap-x-1 text-[11px] font-extrabold mb-1">
                         <span><span aria-hidden="true">🧋</span> <span data-i18n="statHunger">Hunger</span></span>
                         <span id="hungerVal">85%</span>
@@ -231,7 +225,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white border-2 border-black p-2.5 rounded-2xl shadow-hard-sm">
+                <div class="bg-white border-2 border-black px-2 py-1.5 sm:p-2.5 rounded-2xl shadow-hard-sm">
                     <div class="flex flex-wrap justify-between gap-x-1 text-[11px] font-extrabold mb-1">
                         <span><span aria-hidden="true">📖</span> <span data-i18n="statWisdom">Wisdom</span></span>
                         <span id="wisdomVal">70%</span>
@@ -241,7 +235,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white border-2 border-black p-2.5 rounded-2xl shadow-hard-sm">
+                <div class="bg-white border-2 border-black px-2 py-1.5 sm:p-2.5 rounded-2xl shadow-hard-sm">
                     <div class="flex flex-wrap justify-between gap-x-1 text-[11px] font-extrabold mb-1">
                         <span><span aria-hidden="true">⚡</span> <span data-i18n="statEnergy">Energy</span></span>
                         <span id="energyVal">90%</span>
@@ -254,53 +248,25 @@
         </div>
 
         <!-- Care Control Buttons Row -->
-        <div class="w-full grid grid-cols-4 gap-2.5 sm:gap-3.5 mb-6">
-            <button onclick="feedMenu()" class="btn-brutal bg-pop-matcha border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
-                <span class="text-2xl mb-1" aria-hidden="true">🧋</span>
+        <div class="w-full grid grid-cols-4 gap-2.5 sm:gap-3.5 mb-3 sm:mb-6">
+            <button onclick="feedMenu()" class="btn-brutal bg-pop-matcha border-brutal px-1 py-1.5 sm:p-3 rounded-2xl flex flex-col items-center shadow-hard">
+                <span class="text-xl sm:text-2xl sm:mb-1" aria-hidden="true">🧋</span>
                 <span class="font-extrabold text-xs text-center leading-snug" id="lblFeed" data-i18n="btnFeed">Snack</span>
             </button>
 
-            <button onclick="readAction()" class="btn-brutal bg-pop-lemon border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
-                <span class="text-2xl mb-1" aria-hidden="true">📖</span>
+            <button onclick="readAction()" class="btn-brutal bg-pop-lemon border-brutal px-1 py-1.5 sm:p-3 rounded-2xl flex flex-col items-center shadow-hard">
+                <span class="text-xl sm:text-2xl sm:mb-1" aria-hidden="true">📖</span>
                 <span class="font-extrabold text-xs text-center leading-snug" id="lblRead" data-i18n="btnRead">Read</span>
             </button>
 
-            <button onclick="sweepAction()" class="btn-brutal bg-pop-lilac border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
-                <span class="text-2xl mb-1" aria-hidden="true">🧹</span>
+            <button onclick="sweepAction()" class="btn-brutal bg-pop-lilac border-brutal px-1 py-1.5 sm:p-3 rounded-2xl flex flex-col items-center shadow-hard">
+                <span class="text-xl sm:text-2xl sm:mb-1" aria-hidden="true">🧹</span>
                 <span class="font-extrabold text-xs text-center leading-snug" id="lblSweep" data-i18n="btnSweep">Clean</span>
             </button>
 
-            <button onclick="sleepAction()" class="btn-brutal bg-pop-peach border-brutal p-3 rounded-2xl flex flex-col items-center shadow-hard">
-                <span class="text-2xl mb-1" aria-hidden="true">🌙</span>
+            <button onclick="sleepAction()" class="btn-brutal bg-pop-peach border-brutal px-1 py-1.5 sm:p-3 rounded-2xl flex flex-col items-center shadow-hard">
+                <span class="text-xl sm:text-2xl sm:mb-1" aria-hidden="true">🌙</span>
                 <span class="font-extrabold text-xs text-center leading-snug" id="lblSleep" data-i18n="btnSleep">Bedtime</span>
-            </button>
-        </div>
-
-        <!-- Mini-Game: Book Tarot Fortune Wheel Card -->
-        <div class="w-full bg-pop-lemon/40 border-brutal rounded-3xl p-5 mb-6 shadow-hard flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-3 text-center sm:text-left">
-                <span class="text-3xl bg-white p-3 rounded-2xl border-brutal shadow-hard-sm" aria-hidden="true">🔮</span>
-                <div>
-                    <h3 class="font-display font-extrabold text-base sm:text-lg text-pop-ink" id="tarotTitle" data-i18n="tarotTitle">Daily Reading Tarot</h3>
-                    <p class="text-xs text-pop-ink/80 font-medium" id="tarotDesc" data-i18n="tarotDesc">Spin for a gentle reading prompt & vibe of the day!</p>
-                </div>
-            </div>
-            <button onclick="spinBookTarot()" class="btn-brutal bg-pop-tangerine text-pop-ink font-extrabold text-xs px-5 py-3 rounded-2xl border-brutal shadow-hard shrink-0">
-                <span id="btnTarot" data-i18n="tarotBtn">Spin Fortune ✨</span>
-            </button>
-        </div>
-
-        <!-- Babysitting & Link Sharing Banner -->
-        <div class="w-full bg-white border-brutal rounded-3xl p-4 sm:p-5 mb-6 shadow-hard flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-                <span class="text-2xl bg-pop-peach p-2.5 rounded-2xl border-brutal shadow-hard-sm" aria-hidden="true">💌</span>
-                <div>
-                    <h4 class="font-bold text-sm text-pop-ink" id="babysitTitle" data-i18n="babysitTitle">Send Wormy to Babysit</h4>
-                    <p class="text-xs text-pop-ink/80 font-medium" id="babysitDesc" data-i18n="babysitDesc">Share a custom link for friends to care for your worm!</p>
-                </div>
-            </div>
-            <button id="shareBtn" onclick="openBabysitModal()" class="btn-brutal bg-pop-matcha text-pop-ink font-extrabold text-xs px-4 py-2.5 rounded-2xl border-brutal shadow-hard shrink-0">
-                <span data-i18n="shareBtn">Share 🔗</span>
             </button>
         </div>
 
@@ -333,7 +299,7 @@
 
     <!-- Footer -->
     <footer class="mt-8 text-center text-xs font-extrabold text-pop-ink/70">
-        <span data-i18n="footerPrefix">Crafted for</span> <a href="https://readreadread.co/" target="_blank" rel="noopener noreferrer" class="underline text-pop-ink">readreadread.co</a> ☕
+        <span data-i18n="footerPrefix">Crafted for you lot by</span> <a href="https://readreadread.co/" target="_blank" rel="noopener noreferrer" class="underline text-pop-ink">readreadread.co</a> ☕
     </footer>
 
     <!-- Logic Script -->
@@ -404,7 +370,7 @@
                 copied: '✅ Link copied!',
                 copyFailed: 'Press and hold the link above to copy it',
                 closeLabel: 'Close',
-                footerPrefix: 'Crafted for',
+                footerPrefix: 'Crafted for you lot by',
 
                 intro: '"Have you taken a cozy reading pause today? 📖"',
                 pet: 'Wormy loves headpats! 💖',
@@ -469,7 +435,7 @@
                 copied: '✅ คัดลอกลิงก์แล้ว!',
                 copyFailed: 'กดค้างที่ลิงก์ด้านบนเพื่อคัดลอก',
                 closeLabel: 'ปิด',
-                footerPrefix: 'ทำด้วยใจให้',
+                footerPrefix: 'ทำด้วยใจ อยากเล่นอะไร DM มาบอกได้ -',
 
                 intro: '"วันนี้ได้พักอ่านหนังสือสบายๆ บ้างหรือยัง? 📖"',
                 pet: 'ลูบหัว Wormy แล้วอารมณ์ดีเลย! 💖',
